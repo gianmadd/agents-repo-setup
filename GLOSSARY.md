@@ -12,8 +12,12 @@ _Avoid_: installer, bootstrap, init
 Il blocco scritto dal Setup in `AGENTS.md`, letto da ogni agente; in un repo locale con un `AGENTS.md` del team va invece in `CLAUDE.local.md`.
 _Avoid_: prompt, config, regole globali
 
+**Valori personali**:
+Gli account e le identità dell'utente (account GitHub, tenant e utente Azure) che le Istruzioni del repo citano ma non contengono; stanno in `AGENTS.local.md`, mai committato.
+_Avoid_: segreti, credenziali, config locale
+
 **Configurazione consigliata**:
-L'insieme predefinito di skill, plugin e regole che il Setup propone e che l'utente accetta, toglie o integra repo per repo; ogni skill o plugin indica quando usarlo, come si attiva, come si installa e il fallback per gli agenti che non ce l'hanno.
+L'insieme predefinito di skill, plugin e regole che il Setup propone e che l'utente accetta, toglie o integra repo per repo; ogni skill o plugin indica quando usarlo, come si attiva, come si installa e come si spegne nel repo.
 _Avoid_: catalogo, default, preset
 
 **Prerequisito**:
