@@ -25,7 +25,12 @@ Done when every item above has an answer, "absent" included.
 
 ## 2. Ask
 
-Ask every question below in one message, numbered. Each is a plain question with its options and the default marked "(default)"; keep your own opinion out of it. The user answers per number, and "ok" takes every default; follow up on anything unclear until every answer is settled. On a re-run, the current choice is the default. The agents chosen in question 1 shape the others: install commands, switch-offs and subagent lines cover only those agents.
+Each question is a plain question with its options and the default marked "(default)"; keep your own opinion out of it.
+
+- With a multiple-choice question tool (Claude Code: `AskUserQuestion`), use it: default option first, a free-text answer as the open last option (the tool adds "Other" itself), multi-select where several answers fit (agents, skills). It takes at most 4 questions per call and 4 options per question: ask in batches, and when a list is longer (skills to add), ask first by group, then within the chosen groups.
+- Without one, ask every question in one message, numbered, each option lettered and an open last option; "ok" takes every default.
+
+Follow up on anything unclear until every answer is settled. On a re-run, the current choice is the default. The agents chosen in question 1 shape the others: install commands, switch-offs and subagent lines cover only those agents.
 
 1. **Agents**: Which agents work in this repo? Options: the installed ones. Default: all installed.
 2. **Local or shared**: Should the instructions stay out of git (local) or be committed for the team (shared)? Default: local.
