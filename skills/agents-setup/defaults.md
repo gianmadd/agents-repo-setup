@@ -1,6 +1,6 @@
-# Recommended configuration
+# Default configuration
 
-The line `agents-setup` proposes. Each section is a proposal the user confirms, edits or drops. The fenced blocks are the text written to `AGENTS.md` (or to `AGENTS.local.md` where marked); `<angle brackets>` are filled from the answers. Fork this file to change the recommendation.
+The defaults behind `agents-setup`'s questions; the user keeps, changes or drops each one. The fenced blocks are the text written to `AGENTS.md` (or to `AGENTS.local.md` where marked); `<angle brackets>` are filled from the answers. Fork this file to change the defaults.
 
 ## Header
 
@@ -18,7 +18,7 @@ Each entry: prerequisites, install command per agent, how to switch it off for t
 
 ### Feature workflow (mattpocock/skills)
 
-- Proposed: yes.
+- Default: on.
 - Prerequisites: skills `setup-matt-pocock-skills`, `grill-with-docs`, `grilling`, `domain-modeling`, `to-spec`, `to-tickets`, `implement-spec`, `tdd`, `code-review`.
 - Install (every agent): `npx skills add mattpocock/skills -g -y -s <missing skills, space-separated>`.
 
@@ -37,7 +37,7 @@ If `docs/agents/` is missing, the issue tracker is not configured yet: suggest `
 
 ### Skill nudge
 
-- Proposed: yes, only together with the feature workflow.
+- Default: on, only together with the feature workflow.
 
 ```md
 When the user asks for a non-trivial task (new feature, multi-file change, refactor) outside the pipeline, ask once whether to go through it instead. Small fixes and questions go straight ahead.
@@ -45,7 +45,7 @@ When the user asks for a non-trivial task (new feature, multi-file change, refac
 
 ### Ponytail (DietrichGebert/ponytail)
 
-- Proposed: yes.
+- Default: on.
 - Prerequisite: Claude Code plugin `ponytail@ponytail` (`claude plugin list`); Codex plugin `ponytail@ponytail` (`[plugins."ponytail@ponytail"]` in `~/.codex/config.toml`); other agents, skill `ponytail` (`npx skills ls -g`).
 - Install: Claude Code `claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`; Codex `codex plugin marketplace add DietrichGebert/ponytail && codex plugin add ponytail@ponytail`; other agents `npx skills add DietrichGebert/ponytail -g -y`.
 - Switch off for this repo, when dropped but installed: Claude Code, `"enabledPlugins": {"ponytail@ponytail": false}` in `.claude/settings.local.json`; Codex, `[plugins."ponytail@ponytail"]` with `enabled = false` in `.codex/config.toml` (read only once the project is trusted in Codex).
@@ -64,7 +64,7 @@ Any installed skill or plugin the user adds gets one line under `## Workflow`: w
 
 ### Subagents
 
-- Proposed, per agent in use: Claude Code `sonnet`; Codex, ask for the model (show the main model from `~/.codex/config.toml` as reference). Effort `high` for implementation and review, `medium` for the rest.
+- Default, per agent in use: Claude Code `sonnet`; Codex, ask for the model (show the main model from `~/.codex/config.toml` as reference). Effort `high` for implementation and review, `medium` for the rest.
 
 ```md
 ## Subagents
@@ -77,7 +77,7 @@ Subagents run on a cheaper model than the main session: pass model and effort ex
 
 ### Git
 
-- Proposed: GitHub through `gh`, account confirmed by the user; permission level (b).
+- Default: GitHub through `gh`, account chosen by the user; permission level (b).
 - Permission levels: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed, push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main.
 
 ```md
@@ -97,7 +97,7 @@ Subagents run on a cheaper model than the main session: pass model and effort ex
 
 ### Azure
 
-- Proposed: only when the user says the repo uses Azure.
+- Default: off; written only when the user says the repo uses Azure.
 
 ```md
 ## Azure
@@ -115,7 +115,7 @@ Subagents run on a cheaper model than the main session: pass model and effort ex
 
 ### Language
 
-- Proposed: everything in English.
+- Default: everything in English.
 
 ```md
 ## Language

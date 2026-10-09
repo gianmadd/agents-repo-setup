@@ -16,9 +16,9 @@ _Avoid_: prompt, config, regole globali
 Gli account e le identità dell'utente (account GitHub, tenant e utente Azure) che le Istruzioni del repo citano ma non contengono; stanno in `AGENTS.local.md`, mai committato.
 _Avoid_: segreti, credenziali, config locale
 
-**Configurazione consigliata**:
-L'insieme predefinito di skill, plugin e regole che il Setup propone e che l'utente accetta, toglie o integra repo per repo; ogni skill o plugin indica quando usarlo, come si attiva, come si installa e come si spegne nel repo.
-_Avoid_: catalogo, default, preset
+**Configurazione di default**:
+L'insieme di skill, plugin e regole che il Setup usa come risposta di default alle sue domande, e che l'utente tiene, cambia o integra repo per repo; ogni skill o plugin indica quando usarlo, come si attiva, come si installa e come si spegne nel repo.
+_Avoid_: configurazione consigliata, catalogo, preset
 
 **Prerequisito**:
 Una skill o un plugin che le Istruzioni del repo nominano e che deve essere installato perché funzionino.
