@@ -28,7 +28,7 @@ Done when every item above has an answer, "absent" included.
 Present every section below in one message, numbered, each with your recommendation, worded so "ok" accepts it. The user answers per number; re-ask what they changed until every section is confirmed. The agents chosen in section 1 shape the others: install commands, switch-offs and subagent lines cover only those agents.
 
 1. **Agents**: which agents work in this repo. Propose the installed ones.
-2. **Local or shared repo?** Shared: `AGENTS.md` is committed. Local: it stays out of git.
+2. **Local or shared repo?** Local: `AGENTS.md` stays out of git. Shared: it is committed. Recommend local.
 3. **Skills and plugins**: the entries of recommended.md, each marked installed or missing per agent. Ask whether to keep them all, drop some, or add others; to add, list installed skills and plugins outside the recommendation with their descriptions, and ask when each is used and whether the user starts it.
 4. **Subagents**: model and effort for each agent in use.
 5. **GitHub account**: list the accounts from `gh auth status` and ask which one this repo uses, even when there is only one. Show `git config user.email` beside it; when it does not match the chosen account (a GitHub noreply email carries the account name), warn the user. Git config is the user's to change.
