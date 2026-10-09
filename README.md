@@ -9,7 +9,7 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
 ## How the setup runs
 
 1. **Explore**: reads the repo and your machine without changing anything: installed agents, existing `AGENTS.md` / `CLAUDE.md`, git remote and identity, `gh` accounts, `az account show`, installed skills and plugins.
-2. **Ask**: eight multiple-choice questions, each with a default and an open last option (Claude Code shows them as a picker; other agents as a numbered list where "ok" keeps every default):
+2. **Ask**: one chat message with eight numbered questions; each explains what it decides, lists the options with a default and an open last option, and "ok" keeps every default:
    1. which agents work in the repo (Claude Code, Codex, …): the rest adapts to them
    2. local or shared repo (instructions kept out of git, or committed)
    3. skills and plugins: keep the default ones, drop some, add others you have installed (grouped by source)
