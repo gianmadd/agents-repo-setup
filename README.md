@@ -123,13 +123,8 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 
 </details>
 
-## Change the defaults
-
-Fork this repo and edit [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): each entry holds its prerequisites, its install command and the exact text it writes.
-
 ## Files
 
-- [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the setup steps
-- [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): the defaults and the exact text each section writes
+- [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the whole setup: the procedure, then one entry per skill or rule with its question, default and the exact text it writes
 - [`skills/agents-setup/agents/openai.yaml`](skills/agents-setup/agents/openai.yaml): keeps Codex from starting the setup on its own
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary

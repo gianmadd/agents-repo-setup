@@ -17,8 +17,8 @@ The user's accounts, identities and preferences (GitHub account, Azure user, cha
 _Avoid_: secrets, credentials, local config
 
 **Default configuration**:
-The skills, plugins and rules the Setup offers as the default answer to its questions, which the user keeps, changes or extends repo by repo; each skill or plugin states when to use it, how it starts, how to install it and how to switch it off in the repo.
-_Avoid_: recommended configuration, catalog, preset
+The skills, plugins and rules the Setup offers, with the default answer to each of its questions, which the user keeps, changes or extends repo by repo. It lives in `SKILL.md`, after the procedure: one entry per skill, plugin or rule, each with the same fields (what to explore, its question, default, what the question shows, prerequisites, install, switch-off, text written, finish notes, how to use).
+_Avoid_: catalog, preset, recommended configuration
 
 **Prerequisite**:
 A skill, plugin or tool that the Repo instructions name and that must be installed for them to work.
