@@ -69,6 +69,7 @@ Two files:
 - **Existing `CLAUDE.md`**: Claude Code reads only that file, so the setup offers to add `@AGENTS.md` to it.
 - **Existing instructions**: what they already say becomes the default answer (e.g. "commits in Italian, from your `CLAUDE.md`"), so the new rules don't contradict them; what they repeat, the setup offers to delete, so it isn't loaded twice.
 - **Workspace** (a folder holding several repos): both files go in the folder, nothing is committed, and each sub-repo can have its own GitHub account.
+- **Background permissions**: with the workflow, `.claude/settings.local.json` pre-approves the commands `implement-spec`'s background agents need (git, the repo's test and run commands), since they can't ask you. Push, `reset --hard`, `clean`, `branch -D` and `rebase` always ask.
 - **Re-run**: the setup changes only the text between its `<!-- agents-repo-setup -->` markers.
 
 <details>

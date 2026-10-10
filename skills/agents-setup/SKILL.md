@@ -98,7 +98,7 @@ The rules block is the header followed by the kept sections, in section 6 order.
 
 `AGENTS.md`: append the block to an existing file, else create it. A new one is committed in a shared repo, and in a local repo only if the user said so in question 2; otherwise add it to `.git/info/exclude`. In a local repo with a team `AGENTS.md`, the pointer is a committed change to the team's file: tell the user before writing.
 
-`AGENTS.local.md` goes at the repo root and into `.git/info/exclude`. In a workspace or a plain folder both files go in the folder and nothing goes into any `.git/info/exclude`. A switch-off file you create in a local repo, or in a shared repo where it is not already tracked, goes into `.git/info/exclude` as well. With the web UI check kept, so does `.playwright-cli/`, in each sub-repo of a workspace: `playwright-cli` writes page snapshots and console logs there.
+`AGENTS.local.md` goes at the repo root and into `.git/info/exclude`. In a workspace or a plain folder both files go in the folder and nothing goes into any `.git/info/exclude`. A settings file you create (a switch-off, the background permissions) in a local repo, or in a shared repo where it is not already tracked, goes into `.git/info/exclude` as well. With the web UI check kept, so does `.playwright-cli/`, in each sub-repo of a workspace: `playwright-cli` writes page snapshots and console logs there.
 
 When a `CLAUDE.md` exists, Claude Code reads it instead of `AGENTS.md` unless it imports `AGENTS.md`. Never create a `CLAUDE.md`; if one exists without the import, offer: (a) `@AGENTS.md` as its first line, a committed change (default in a shared repo); (b) the user sets **Project instructions** to `claude-md-and-agents-md` in Claude Code's `/config`, which applies to all their repos (default in a local repo).
 
@@ -178,7 +178,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```md
   ## Workflow
 
-  New features go through the mattpocock/skills pipeline, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself.
+  New features go through the mattpocock/skills pipeline, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself. The four steps and `setup-matt-pocock-skills` are commands only the user can run, so they are missing from your skill list even when installed: suggest them by command (`/grill-with-docs` in Claude Code, `$grill-with-docs` in Codex), never as missing.
 
   1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs.
   2. `to-spec`: turn the settled design into a spec on the issue tracker.
@@ -189,6 +189,23 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```
 - **Finish**: if `docs/agents/` is missing, run `setup-matt-pocock-skills` now. It writes its section to `AGENTS.md` (to `CLAUDE.md` if one exists), so that section is tracked exactly when that file is. Its new files (`docs/agents/`, `GLOSSARY.md`, `docs/adr/`) start untracked: commit them or add them to `.git/info/exclude`.
 - **How to use**: New feature: start `grill-with-docs`; when each step ends, the agent suggests the next. `implement-spec` ends with the review on its own.
+
+#### Background permissions
+
+- **Explore**: `.claude/settings.local.json`, if it exists, and whether it is tracked; the repo's test, build and run commands (`package.json` scripts, `Makefile`, `*.csproj`, Gradle).
+- **Default**: on, only together with the feature workflow, and only for Claude Code.
+- **Shown in the question**: `implement-spec` runs its subagents in the background, where Claude Code cannot ask you for permission: a command not pre-approved is refused and the ticket stalls. This pre-approves what they need, and always asks for push and destructive git.
+- **Writes**, to `.claude/settings.local.json`, not to the rules block: merge into `permissions`, keeping what is there.
+  ```json
+  {
+    "permissions": {
+      "allow": ["Edit", "Bash(git *)", "Bash(<each test, build and run command>)", "Bash(ls *)", "Bash(cat *)", "Bash(head *)", "Bash(tail *)", "Bash(grep *)", "Bash(find *)", "Bash(wc *)", "Bash(pwd)", "Bash(lsof *)", "Bash(kill *)"],
+      "ask": ["Bash(git push*)", "Bash(git reset --hard*)", "Bash(git clean*)", "Bash(git branch -D*)", "Bash(git rebase*)"]
+    }
+  }
+  ```
+  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`); add `Bash(playwright-cli *)` with the web UI check and `Bash(adb *)` with Android. `ask` wins over `allow`. With git level (a), allow only reading git (`git status`, `diff`, `log`, `show`) instead of `Bash(git *)`; with level (c), ask only for `git push --force*` and `git push * main*`, not every push.
+- **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; push and destructive git still ask you.
 
 #### Skill nudge
 
