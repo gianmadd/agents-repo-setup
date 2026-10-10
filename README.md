@@ -9,7 +9,7 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
 ## How the setup runs
 
 1. **Explore**: reads the repo and your machine without changing anything: installed agents, existing `AGENTS.md` / `CLAUDE.md`, git remote, credential helper and identity, `gh` accounts, `az account show`, installed skills and plugins.
-2. **Ask**: one chat message with eight numbered questions; each explains what it decides, lists the options with a default and an open last option, and "ok" keeps every default:
+2. **Ask**: one chat message that opens with what it found, then eight numbered questions; each explains what it decides, lists the options with a default and an open last option, and "ok" keeps every default:
    1. which agents work in the repo (Claude Code, Codex, …): the rest adapts to them
    2. local or shared (rules kept in your uncommitted `AGENTS.local.md`, or committed in `AGENTS.md`)
    3. skills and plugins: keep the default ones, drop some, add others you have installed (grouped by source)
@@ -19,8 +19,8 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
    7. Azure, in two independent parts: resources (tenant, subscription, user) and Azure DevOps (org and project of the work items)
    8. language for chat and for code
 3. **Prerequisites**: anything missing is installed after your ok; a default plugin you dropped is switched off for this repo only.
-4. **Write**: shows every file (or the diff on a re-run) and writes after your ok.
-5. **Finish**: reminds you to run `setup-matt-pocock-skills` if the repo needs it.
+4. **Write**: shows what goes in each file, one line per section (the diff on a re-run), and writes after your ok.
+5. **Finish**: reminds you to run `setup-matt-pocock-skills` if the repo needs it, and closes with how to use what was set up.
 
 ## What it writes
 
@@ -93,6 +93,16 @@ In a local repo a new `AGENTS.md` is committed only if you say so, so tools like
 In a **workspace**, a folder that holds several repos and where you launch the agents, nothing is committed: the rules go to the folder's `AGENTS.md`, your values to `AGENTS.local.md`, and git commands run inside the sub-repos.
 
 If an instruction file already has text of its own, the setup lists what repeats or contradicts the new block and asks how to merge it. Re-running the setup replaces only the text between the markers.
+
+## What you can do after
+
+- **New feature**: start `/grill-with-docs`. The agent interviews you until the design is settled, then suggests each next step; you start it:
+  1. `/grill-with-docs`: the interview; updates `GLOSSARY.md` and ADRs
+  2. `/to-spec`: the spec on the issue tracker
+  3. `/to-tickets`: tickets with blocking relations
+  4. `/implement-spec`: code with subagents and TDD; the final review runs `code-review` and `ponytail-review` on its own
+- **Small fixes and questions**: just ask. For a larger task the agent asks once whether to use the pipeline.
+- **Ponytail** is always on: the agent writes the least code that fully solves the task, with no command.
 
 ## Default configuration
 

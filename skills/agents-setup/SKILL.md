@@ -26,18 +26,33 @@ Done when every item above has an answer, "absent" included.
 
 ## 2. Ask
 
-Ask every question in one chat message, numbered, in plain text (no multiple-choice tool). For each question:
+Ask every question in one chat message, in plain text (no multiple-choice tool). Open it with what step 1 found, at most five short lines: agents, repo (or workspace) and remote, GitHub accounts, Azure, existing instruction files. Then each question in this shape, a blank line between questions:
 
-- explain in one or two sentences what it decides and what changes with each answer, for a user who has never seen this setup;
-- list the options lettered, mark the default "(default)", and end with an open option ("other: tell me");
-- keep your own opinion out of it.
+```md
+**3. Skills and plugins**
+<one or two sentences: what it decides and what changes with each answer, for a user who has never seen this setup>
+a) <option> (default)
+b) <option>
+c) other: tell me
+```
+
+One option per line, a few words each; keep your own opinion out of it. End the message with one line: "Answer by number, or 'ok' to keep every default."
 
 The user answers per number, and "ok" takes every default. Follow up on anything unclear until every answer is settled. On a re-run, the current choice is the default. The agents chosen in question 1 shape the others: install commands, switch-offs and subagent lines cover only those agents.
 
 1. **Agents**: Which agents work in this repo? Options: the installed ones. Default: all installed.
 2. **Local or shared** (skip it in a workspace: nothing there is committed; rules go to `AGENTS.md`, personal values to `AGENTS.local.md`, as in a shared repo): Should the rules be committed for the team (shared: in `AGENTS.md`) or stay yours (local: in `AGENTS.local.md`)? Personal values stay in `AGENTS.local.md` either way. Default: local.
    Local, and no `AGENTS.md` exists yet: should the new `AGENTS.md` be committed? It holds the pointer to `AGENTS.local.md` now, and whatever other tools add later (`setup-matt-pocock-skills` writes its section there). Default: no.
-3. **Skills and plugins**: Which of the default skills and plugins should this repo use? List each entry of defaults.md, marked installed or missing per agent. Default: all.
+3. **Skills and plugins**: Which of the default skills and plugins should this repo use? First show what the defaults give, as this list:
+   ```md
+   New features, one step at a time; you start each step, the agent suggests the next:
+   1. `grill-with-docs`: interviews you until the design is settled
+   2. `to-spec`: writes the spec on the issue tracker
+   3. `to-tickets`: splits it into tickets
+   4. `implement-spec`: builds the tickets with TDD; the final review runs `code-review` and `ponytail-review` on its own
+   Ponytail is always on: the agent writes the least code that fully solves the task.
+   ```
+   Then list each entry of defaults.md, marked installed or missing per agent. Default: all.
    Then: Do you want to add others? List the installed skills and plugins outside the defaults grouped by source: one group per skill package in `npx skills ls -g` (e.g. mattpocock/skills), one per plugin, one for the repo's own skills; each name with a few-word description. For each one added, ask when it is used and whether the user starts it.
 4. **Subagents**: Which model and effort should subagents use, per agent? Default: from defaults.md.
 5. **GitHub account**: Only when the remote is on GitHub (in a workspace: any sub-repo's remote); otherwise skip it and leave out the GitHub lines. In a workspace, when sub-repos belong to different owners, ask whether one account covers them all. Which GitHub account does this repo use? Options: the accounts in `gh auth status`; ask even when there is only one. Default: the one matching `git config user.email` (a GitHub noreply email carries the account name), else the active one. When the chosen account and `git config user.email` disagree, warn the user; git config is theirs to change. When the remote is SSH or git's credential helper is not `gh auth git-credential`, tell the user the rule covers only `gh`: git authenticates with their SSH key or helper.
@@ -80,7 +95,7 @@ When a `CLAUDE.md` exists, Claude Code reads it instead of `AGENTS.md` unless it
 
 When `AGENTS.md`, `AGENTS.local.md` or `CLAUDE.md` already holds text outside the markers, compare it with the new blocks: list what repeats or contradicts them and ask the user how to merge (drop it from their text, keep it out of the block, or rewrite). Never edit their text without an ok; in a team file, an edit is a committed change.
 
-On a re-run, replace only the text between the markers. A block left in `CLAUDE.local.md` by an older version: remove it, delete the file if nothing else is left, and drop its line from `.git/info/exclude`. Show the user every file's full block, or the diff on a re-run, and write after their ok.
+On a re-run, replace only the text between the markers. A block left in `CLAUDE.local.md` by an older version: remove it, delete the file if nothing else is left, and drop its line from `.git/info/exclude`. Before writing, show per file: its path, whether it is committed, and one line per section it gets ("Git: local commits free, push and PRs on confirmation"); on a re-run, the diff instead. Show a full block only when the user asks. Write after their ok.
 
 ## 5. Finish
 
@@ -90,4 +105,12 @@ If the rules are local and Codex is in use, tell the user Codex loads them only 
 
 If a Codex switch-off was written and the project is not trusted in `~/.codex/config.toml`, tell the user Codex ignores `.codex/config.toml` until they trust the project.
 
-Report what was written, where, and anything the user skipped.
+Report what was written, where, and anything the user skipped. Put the to-dos above first, as a numbered list. Close with how to use it, covering only what was kept:
+
+```md
+**How to use it**
+- New feature: start `grill-with-docs`; when each step ends, the agent suggests the next. `implement-spec` ends with the review on its own.
+- Small fixes and questions: just ask; for a larger task the agent asks once whether to use the pipeline.
+- Ponytail is always on: no command needed.
+- <one line per skill the user added: when to use it>
+```
