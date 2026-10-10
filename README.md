@@ -126,5 +126,4 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 ## Files
 
 - [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the whole setup: the procedure, then one entry per skill or rule with its question, default and the exact text it writes
-- [`skills/agents-setup/agents/openai.yaml`](skills/agents-setup/agents/openai.yaml): keeps Codex from starting the setup on its own
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary
