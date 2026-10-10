@@ -30,6 +30,7 @@ A feature workflow built on [mattpocock/skills](https://github.com/mattpocock/sk
 | | `/implement-spec` | subagents build the tickets with TDD; the final review runs `code-review` and `ponytail-review` on its own |
 | fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the workflow |
 | keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
+| check a UI change | nothing | before saying it's done, the agent opens the app with [playwright-cli](https://github.com/microsoft/playwright-cli), tries the flow and reads the console |
 
 First time in a repo, run `/setup-matt-pocock-skills` too: it tells the workflow where the issues live. The setup reminds you.
 
@@ -41,7 +42,7 @@ One message, every question with its options and a default:
 |---|---|---|
 | 1 | which agents work in the repo | all installed |
 | 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only | yours only |
-| 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
+| 3 | which skills and plugins, and any others you have installed | the workflow, ponytail and the UI check (off in repos with code but no web UI) |
 | 4 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
 | 5 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
 | 6 | what the agent may do with git without asking; how it names branches and writes commits and PRs | branches and local commits; `feat/420-login-page`, short explanatory messages |
@@ -65,7 +66,7 @@ Two files:
 `AGENTS.md` always ends with a pointer that makes every agent read `AGENTS.local.md` too.
 
 - **Existing `CLAUDE.md`**: Claude Code reads only that file, so the setup offers to add `@AGENTS.md` to it.
-- **Existing instructions**: what they already say becomes the default answer (e.g. "commits in Italian, from your `CLAUDE.md`"), so the new rules don't contradict them.
+- **Existing instructions**: what they already say becomes the default answer (e.g. "commits in Italian, from your `CLAUDE.md`"), so the new rules don't contradict them; what they repeat, the setup offers to delete, so it isn't loaded twice.
 - **Workspace** (a folder holding several repos): both files go in the folder, nothing is committed, and each sub-repo can have its own GitHub account.
 - **Re-run**: the setup changes only the text between its `<!-- agents-repo-setup -->` markers.
 
@@ -93,6 +94,10 @@ Write and review code the ponytail way: the plugin loads it every session.
 
 - Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; …
 - Reviews outside the pipeline: `ponytail-review`.
+
+## UI check
+
+Before calling a UI change done, start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. …
 
 ## Subagents
 

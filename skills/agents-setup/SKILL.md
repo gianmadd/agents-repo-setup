@@ -102,7 +102,7 @@ The rules block is the header followed by the kept sections, in section 6 order.
 
 When a `CLAUDE.md` exists, Claude Code reads it instead of `AGENTS.md` unless it imports `AGENTS.md`. Never create a `CLAUDE.md`; if one exists without the import, offer: (a) `@AGENTS.md` as its first line, a committed change (default in a shared repo); (b) the user sets **Project instructions** to `claude-md-and-agents-md` in Claude Code's `/config`, which applies to all their repos (default in a local repo).
 
-When `AGENTS.md`, `AGENTS.local.md` or `CLAUDE.md` already holds text outside the markers, compare it with the new blocks. Mention in one line what it repeats, and leave it. For what contradicts an answer the user gave against their own text, ask how to merge: change their text to match the answer (default), keep both and drop that rule from the block, or rewrite. Never edit their text without an ok; in a team file, an edit is a committed change.
+When `AGENTS.md`, `AGENTS.local.md` or `CLAUDE.md` already holds text outside the markers, compare it with the new blocks. For what it repeats, offer to delete it from their text (default: delete; in a team file, a committed change): every repeat is loaded twice in every session. For what contradicts an answer the user gave against their own text, ask how to merge: change their text to match the answer (default), keep both and drop that rule from the block, or rewrite. Never edit their text without an ok; in a team file, an edit is a committed change.
 
 On a re-run, replace only the text between the markers. Before writing, show per file: its path, whether it is committed, and one line per section it gets ("Git: local commits free, push and PRs on confirmation"); on a re-run, the diff instead. Show a full block only when the user asks. Write after their ok. The setup never commits: what should be committed goes in step 5's To do.
 
@@ -218,6 +218,21 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```
   Without the feature workflow, the last line reads "Reviews: `ponytail-review`."
 - **How to use**: Ponytail is always on: no command needed.
+
+#### UI check (microsoft/playwright-cli)
+
+- **Explore**: whether the repo has a web UI: a frontend framework in `package.json` (React, Vue, Svelte, Angular, Next…), or `.html`, `.razor`, `.cshtml` files outside dependencies.
+- **Default**: on, unless the repo already has code and none of it is a web UI. A new or empty repo keeps it on: its UI may not exist yet.
+- **Shown in the question**: Before calling a UI change done, the agent opens the app in a browser, tries the flow and reads the console: tests don't see a blank page or a hidden button.
+- **Prerequisites**: command `playwright-cli` (Node 18+); skill `playwright-cli` (`npx skills ls -g`); a browser: Google Chrome, which `playwright-cli` uses by default, or Playwright's Chromium (`chromium-*` in Playwright's browser cache, `~/Library/Caches/ms-playwright` on macOS).
+- **Install** (every agent): `npm install -g @playwright/cli@latest`, then `npx skills add microsoft/playwright-cli -g -y -s playwright-cli`; without Google Chrome, `playwright-cli install-browser chromium` too, and offer `export PLAYWRIGHT_MCP_BROWSER=chromium` in the user's shell profile so it becomes the default.
+- **Writes**:
+  ```md
+  ## UI check
+
+  Before calling a UI change done, start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. Passing tests don't show a blank page or a hidden button. If Google Chrome is missing, pass `--browser=chromium`.
+  ```
+- **How to use**: UI changes: the agent checks them in the browser on its own before saying they're done.
 
 #### Added by the user
 
