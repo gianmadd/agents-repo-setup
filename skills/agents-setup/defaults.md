@@ -92,7 +92,8 @@ Subagents use the model and effort below: pass both explicitly at every spawn.
 
 ### Git
 
-- Default: permission level (b). The GitHub lines only when the remote is on GitHub, with the account chosen by the user.
+- Default: permission level (b). Not written in a plain folder (no git). The GitHub lines only when the user chose a GitHub account in question 5.
+- Prerequisite for a GitHub account: `gh`. Install: `brew install gh` (other systems: https://cli.github.com), then the user runs `gh auth login`: logging in is their job.
 - Permission levels: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed, push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main and merging PRs into main. When the work items live on Azure DevOps, say "work items" instead of "issues".
 
 ```md
@@ -107,17 +108,17 @@ Workspace only, appended to the section:
 This folder is not a git repo: run git and `gh` inside the sub-repo concerned (`git -C <repo> …`). Sub-repos: <list>.
 ```
 
-GitHub remote only, appended to the section:
+GitHub account chosen only, appended to the section:
 
 ```md
 This machine's active GitHub account, which may not be this repo's, is used by `gh`<" and by git through its `gh` credential helper">. Prefix every `gh` command<", and every `git` command that reaches GitHub (push, pull, fetch),"> with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; if it is missing, ask the user.
 ```
 
-The quoted parts only when the remote is HTTPS and git's credential helper is `gh auth git-credential`: `GH_TOKEN` reaches git only through that helper.
+The quoted parts only when the remote is HTTPS (or there is no remote yet) and git's credential helper is `gh auth git-credential`: `GH_TOKEN` reaches git only through that helper.
 
 Workspace whose sub-repos use different accounts: `<account>` becomes "the sub-repo's account". When only some sub-repos qualify for the quoted parts, keep them and add "`<sub-repos>` use SSH: there the prefix covers only `gh`."
 
-`AGENTS.local.md`, GitHub remote only:
+`AGENTS.local.md`, GitHub account chosen only:
 
 ```md
 - GitHub account: `<account>`

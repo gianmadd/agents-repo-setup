@@ -34,10 +34,10 @@ One message, every question with its options and a default:
 | # | Decides | Default |
 |---|---|---|
 | 1 | which agents work in the repo | all installed |
-| 2 | rules shared with the team (committed) or yours only | yours only |
+| 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only | yours only |
 | 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
 | 4 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
-| 5 | GitHub account (GitHub remotes only); with one account, just a confirmation | the one matching your git email |
+| 5 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
 | 6 | what the agent may do with git without asking | branches and local commits |
 | 7 | Azure resources and Azure DevOps | no |
 | 8 | language for chat, and for code and commits | English |
