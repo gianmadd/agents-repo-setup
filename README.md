@@ -39,11 +39,14 @@ New features go through the mattpocock/skills pipeline, one step at a time. The 
 1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs.
 2. `to-spec`: turn the settled design into a spec on the issue tracker.
 3. `to-tickets`: split the spec into tickets with blocking relations.
-4. `implement-spec`: implement the tickets with subagents, TDD and a final code review.
+4. `implement-spec`: implement the tickets with subagents, TDD and a final review (`code-review` plus `ponytail-review`).
 
 ## Code
 
-Write and review code the ponytail way: the plugin loads it every session; use `ponytail-review` for reviews.
+Write and review code the ponytail way: the plugin loads it every session.
+
+- Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; keep their reports separate, then fix every finding of `code-review` and the "Must fix" and "Should fix" of `ponytail-review` in one implementer subagent. List the "Nice to have" for the user.
+- Reviews outside the pipeline: `ponytail-review`.
 
 ## Subagents
 

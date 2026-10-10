@@ -60,11 +60,15 @@ When the user asks for a non-trivial task (new feature, multi-file change, refac
 - Prerequisite: Claude Code plugin `ponytail@ponytail` (`claude plugin list`); Codex plugin `ponytail@ponytail` (`[plugins."ponytail@ponytail"]` in `~/.codex/config.toml`); other agents, skill `ponytail` (`npx skills ls -g`).
 - Install: Claude Code `claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`; Codex `codex plugin marketplace add DietrichGebert/ponytail && codex plugin add ponytail@ponytail`; other agents `npx skills add DietrichGebert/ponytail -g -y`.
 - Switch off for this repo, when dropped but installed: Claude Code, `"enabledPlugins": {"ponytail@ponytail": false}` in `.claude/settings.local.json`; Codex, `[plugins."ponytail@ponytail"]` with `enabled = false` in `.codex/config.toml` (read only once the project is trusted in Codex).
+- The `implement-spec` line only when the feature workflow is kept too.
 
 ```md
 ## Code
 
-Write and review code the ponytail way: the plugin loads it every session; use `ponytail-review` for reviews.
+Write and review code the ponytail way: the plugin loads it every session.
+
+- Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; keep their reports separate, then fix every finding of `code-review` and the "Must fix" and "Should fix" of `ponytail-review` in one implementer subagent. List the "Nice to have" for the user.
+- Reviews outside the pipeline: `ponytail-review`.
 ```
 
 ### Added by the user
