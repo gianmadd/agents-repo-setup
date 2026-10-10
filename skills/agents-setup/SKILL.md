@@ -266,7 +266,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 #### Git permissions
 
-- **Question**: What may the agent do with git and GitHub without asking?
+- **Question**: Git, two parts; this is the first. What may the agent do with git and GitHub without asking?
 - **Default**: (b).
 - **Options**: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed; push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main and merging PRs into main.
 - **Writes**, not in a plain folder (no git):
@@ -275,11 +275,35 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
   - Allowed without asking: <level>.
   - Ask first: <level>.
+  - Always ask first, whatever the above allows: `push --force`, `reset --hard`, `branch -D`, `clean`, and rewriting pushed commits. They lose work.
   ```
-  The two lines per level: (a) nothing / any command that writes to git or GitHub; (b) creating and switching branches, local commits / push, opening or merging PRs, merging to main, creating or editing issues; (c) branches, commits, push to branches other than main, opening and merging PRs into other branches, creating or editing issues / pushing to main, merging PRs into main.
+  The two lines per level: (a) nothing / any command that writes to git or GitHub; (b) creating and switching branches, local commits / push, opening or merging PRs, merging to main, creating or editing issues; (c) branches, commits, push to branches other than main, opening and merging PRs into other branches, creating or editing issues / pushing to main, merging PRs into main. The third line not with (a): it already asks for everything.
   In a workspace, appended:
   ```md
   This folder is not a git repo: run git and `gh` inside the sub-repo concerned (`git -C <repo> …`). Sub-repos: <list>.
+  ```
+
+#### Git conventions
+
+- **Explore**: `git branch -a` and `git log --oneline -20`: the branch names and commit messages already in use.
+- **Question**: part of the Git question. How should the agent name branches and write commits and PRs? Options: the default; the convention the history already follows, when it differs (named in one line, e.g. "Conventional Commits"); other: tell me.
+- **Default**: as below.
+- **Writes**, not in a plain folder, as bullets in the Git section after the permission lines:
+  ```md
+  - Branches: `<type>/<task>-<short-title>`, e.g. `feat/420-login-page`; type `feat`, `fix`, `refactor`, `docs` or `chore`; no `<task>` when the work has no task.
+  - Commit messages and PR descriptions: say what changed and why, in plain words. Short and explanatory, not a wall of technical detail.
+  ```
+  With the history's convention, write it in the same shape instead.
+
+#### Secrets
+
+Always written, no question: a leaked key is the one mistake that cannot be taken back.
+
+- **Writes**:
+  ```md
+  ## Secrets
+
+  Never print, commit or paste secrets: `.env` files, keys, tokens, passwords, connection strings. To check one is set, test that it exists, not its value.
   ```
 
 #### Azure resources
@@ -294,7 +318,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ## Azure resources
 
   - They live in tenant `<tenant>`, subscription `<subscription>`. Before any `az` command that touches them (anything but `az devops`, `az boards`, `az repos`, `az pipelines`), check `az account show` against these and the user in `AGENTS.local.md`. On a mismatch stop and tell the user to run `az login --tenant <tenant>`: logging in is their job.
-  - Read-only: any write needs the user's explicit confirmation, whatever the git permissions say. Never print secret values, keys or connection strings.
+  - Read-only: any write needs the user's explicit confirmation, whatever the git permissions say.
   ```
   `AGENTS.local.md`:
   ```md

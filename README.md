@@ -2,7 +2,7 @@
 
 Stop re-explaining your workflow to coding agents at the start of every session.
 
-`agents-setup` is a skill you run once per repo. It asks eight questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
+`agents-setup` is a skill you run once per repo. It asks eight questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git and how it names branches and writes commits, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
 
 ## Quick start
 
@@ -44,7 +44,7 @@ One message, every question with its options and a default:
 | 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
 | 4 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
 | 5 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
-| 6 | what the agent may do with git without asking | branches and local commits |
+| 6 | what the agent may do with git without asking; how it names branches and writes commits and PRs | branches and local commits; `feat/420-login-page`, short explanatory messages |
 | 7 | Azure resources and Azure DevOps | no |
 | 8 | language for chat, and for code and commits | English |
 
@@ -104,13 +104,20 @@ Subagents use the model and effort below: pass both explicitly at every spawn.
 
 - Allowed without asking: creating branches, local commits.
 - Ask first: push, opening or merging PRs, merging to main, creating or editing work items.
+- Always ask first, whatever the above allows: `push --force`, `reset --hard`, `branch -D`, `clean`, and rewriting pushed commits. They lose work.
+- Branches: `<type>/<task>-<short-title>`, e.g. `feat/420-login-page`; …
+- Commit messages and PR descriptions: say what changed and why, in plain words. Short and explanatory, not a wall of technical detail.
 
 Prefix every `gh` command, and every `git` command that reaches GitHub, with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; …
+
+## Secrets
+
+Never print, commit or paste secrets: `.env` files, keys, tokens, passwords, connection strings. …
 
 ## Azure resources
 
 - They live in tenant `your-tenant`, subscription `your-subscription`. Before any `az` command that touches them (anything but `az devops`, `az boards`, `az repos`, `az pipelines`), check `az account show` against these and the user in `AGENTS.local.md`; …
-- Read-only: any write needs the user's explicit confirmation, whatever the git permissions say. …
+- Read-only: any write needs the user's explicit confirmation, whatever the git permissions say.
 
 ## Azure DevOps
 
