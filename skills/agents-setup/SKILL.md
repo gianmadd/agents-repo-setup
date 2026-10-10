@@ -237,7 +237,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```md
   ## UI check
 
-  Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button.
+  Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button. When done, stop the processes you started: a server left running holds its port next time.
 
   - Web: start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. If Google Chrome is missing, pass `--browser=chromium`.
   - Android: install the app on a running emulator or device (`adb devices`; `./gradlew installDebug`, or how the repo builds), walk through the changed flow with `adb` (`shell uiautomator dump` to find elements, `shell input tap` and `shell input text`, `exec-out screencap -p` for a screenshot) and check `adb logcat` for crashes. With no device running, start an emulator if one is configured, else ask the user.

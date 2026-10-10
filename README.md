@@ -98,7 +98,7 @@ Write and review code the ponytail way: the plugin loads it every session.
 
 ## UI check
 
-Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button.
+Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button. When done, stop the processes you started: a server left running holds its port next time.
 
 - Web: start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. …
 
