@@ -16,7 +16,7 @@ The block is loaded on every turn of every session: rules and the reason behind 
 
 Read-only. Gather:
 
-- Agents installed: `which claude codex cursor gemini copilot`.
+- Agents installed: `which claude codex cursor-agent gemini copilot` (Cursor's CLI is `cursor-agent`).
 - Whether the folder is a git repo. If not but its subfolders hold git repos, it is a **workspace** (one folder, several repos, agents launched from the folder): run every repo check in each sub-repo. If neither, it is a **plain folder**: maybe a new project before `git init`.
 - `AGENTS.md`, `AGENTS.local.md`, `CLAUDE.md` at the repo root, whether `AGENTS.md` is tracked (`git ls-files AGENTS.md`), and whether any holds an `<!-- agents-repo-setup -->` block. If one does, this is a re-run: its current choices become the defaults in step 2.
 - Installed skills and plugins: `npx skills ls -g`, `.agents/skills/` and `.claude/skills/` in the repo, the agents' global skill folders (`~/.claude/skills/`, `~/.codex/skills/`, `~/.agents/skills/`) for skills installed by their own installers (skip hidden folders, `~/.claude/skills/synced/`, which holds claude.ai's own skills, and links into `~/.agents/skills/`, already listed by `npx skills`), `claude plugin list` and `~/.codex/config.toml` for the agents present.
@@ -228,7 +228,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```md
   ## Code
 
-  Write and review code the ponytail way: the plugin loads it every session.
+  Write and review code the ponytail way: the plugin loads it every session; where ponytail is installed as a skill instead, load the `ponytail` skill before writing code.
 
   - Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; keep their reports separate, then fix every finding of `code-review` and the "Must fix" and "Should fix" of `ponytail-review` in one implementer subagent. List the "Nice to have" for the user.
   - Reviews outside the pipeline: `ponytail-review`.

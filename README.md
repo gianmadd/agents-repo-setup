@@ -92,7 +92,7 @@ New features go through the mattpocock/skills pipeline, one step at a time. The 
 
 ## Code
 
-Write and review code the ponytail way: the plugin loads it every session.
+Write and review code the ponytail way: the plugin loads it every session; where ponytail is installed as a skill instead, load the `ponytail` skill before writing code.
 
 - Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; …
 - Reviews outside the pipeline: `ponytail-review`.
