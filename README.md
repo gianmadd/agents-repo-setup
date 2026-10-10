@@ -30,7 +30,7 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
 <!-- agents-repo-setup -->
 # Agent instructions
 
-Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity) are in `AGENTS.local.md`.
+Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity, chat language) are in `AGENTS.local.md`.
 
 ## Workflow
 
@@ -63,7 +63,7 @@ This machine's active GitHub account, which may not be this repo's, is used by `
 
 ## Language
 
-Everything in English: chat, code, comments, commits.
+Code, comments and commits in English.
 
 ## Personal instructions
 
@@ -78,6 +78,7 @@ It holds this checkout's personal rules; it is not committed and not every agent
 <!-- agents-repo-setup -->
 - GitHub account: `your-account`
 - Azure user: `…`
+- Chat language: English
 <!-- /agents-repo-setup -->
 ```
 

@@ -4,7 +4,7 @@ The defaults behind `agents-setup`'s questions; the user keeps, changes or drops
 
 ## Pointer
 
-Always written to `AGENTS.md`, inside the markers, so every agent also loads `AGENTS.local.md`: Claude Code through the `@` import, other agents by following the sentence.
+Always written to `AGENTS.md`, inside the markers, so every agent also loads `AGENTS.local.md`: Claude Code through the `@` import, other agents by following the sentence. In a workspace, leave out the last sentence: the folder has no worktrees.
 
 ```md
 ## Personal instructions
@@ -15,12 +15,12 @@ It holds this checkout's personal rules; it is not committed and not every agent
 
 ## Header
 
-Always written, first in the rules block.
+Always written, first in the rules block. The second sentence only in a shared repo or a workspace, where `AGENTS.local.md` is a separate file.
 
 ```md
 # Agent instructions
 
-Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity) are in `AGENTS.local.md`.
+Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity, chat language) are in `AGENTS.local.md`.
 ```
 
 ## Skills and plugins
@@ -93,7 +93,7 @@ Subagents use the model and effort below: pass both explicitly at every spawn.
 ### Git
 
 - Default: permission level (b). The GitHub lines only when the remote is on GitHub, with the account chosen by the user.
-- Permission levels: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed, push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main.
+- Permission levels: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed, push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main and merging PRs into main. When the work items live on Azure DevOps, say "work items" instead of "issues".
 
 ```md
 ## Git
@@ -115,11 +115,15 @@ This machine's active GitHub account, which may not be this repo's, is used by `
 
 The quoted parts only when the remote is HTTPS and git's credential helper is `gh auth git-credential`: `GH_TOKEN` reaches git only through that helper.
 
+Workspace whose sub-repos use different accounts: `<account>` becomes "the sub-repo's account". When only some sub-repos qualify for the quoted parts, keep them and add "`<sub-repos>` use SSH: there the prefix covers only `gh`."
+
 `AGENTS.local.md`, GitHub remote only:
 
 ```md
 - GitHub account: `<account>`
 ```
+
+Workspace with different accounts: ``- GitHub account: `<account>` for `<sub-repo>`, …``.
 
 ### Azure resources
 
@@ -151,10 +155,16 @@ The quoted parts only when the remote is HTTPS and git's credential helper is `g
 
 ### Language
 
-- Default: everything in English.
+- Default: everything in English. The chat language is personal: it goes to `AGENTS.local.md`, so a shared repo does not impose it on the team.
 
 ```md
 ## Language
 
-<"Everything in English: chat, code, comments, commits." or the user's split>
+Code, comments and commits in <language>.
+```
+
+`AGENTS.local.md`:
+
+```md
+- Chat language: <language>
 ```
