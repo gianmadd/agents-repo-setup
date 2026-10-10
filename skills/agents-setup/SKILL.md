@@ -6,9 +6,9 @@ disable-model-invocation: true
 
 # Agents setup
 
-Write this repo's **repo instructions**: a rules block telling any coding agent which skills to use when, plus this repo's rules (git, accounts, cloud, subagents, language…), and the user's personal values. Two files only, never a `CLAUDE.md`: `AGENTS.md` for what belongs to the project, `AGENTS.local.md`, never committed, for what belongs to the user. You ask, the user decides: nothing is written before every question is answered.
+Write this repo's **repo instructions**: a rules block telling any coding agent which skills to use when, plus this repo's rules (git, accounts, cloud, subagents, language…), and the user's personal values. Two files: `AGENTS.md` for what belongs to the project, `AGENTS.local.md`, never committed, for what belongs to the user. You ask, the user decides: nothing is written before every question is answered.
 
-Steps 1 to 5 are the procedure and name no skill and no rule. What to check, ask, install and write comes from the entries in section 6, through their fields: **Explore**, **Question**, **Default**, **Shown in the question**, **Prerequisites**, **Install**, **Switch off**, **Writes**, **Finish**, **How to use**.
+What to check, ask, install and write for each skill and rule comes from its entry in section 6, through the fields **Explore**, **Question**, **Default**, **Shown in the question**, **Prerequisites**, **Install**, **Switch off**, **Writes**, **Finish**, **How to use**.
 
 The block is loaded on every turn of every session: rules and the reason behind each, nothing the agent can discover by looking at the repo.
 
@@ -59,7 +59,7 @@ The user answers per number, and "ok" takes every default. Follow up on anything
 - The agents chosen in question 1 shape the others: install commands, switch-offs and per-agent lines cover only those agents.
 - Never skip a question because a tool is missing: when an answer needs something not installed, say so in the question; step 3 installs it.
 
-The first two questions decide where the files go, so they are part of the procedure:
+The first two questions decide where the files go:
 
 1. **Agents**: Which agents work in this repo? Options: the installed ones. Default: all installed.
 2. **Git and sharing**, up to three parts; number the ones that apply in order (2a, 2b, …). Ask them all in the same message, a later part marked with when it applies ("only if local").
@@ -67,7 +67,7 @@ The first two questions decide where the files go, so they are part of the proce
    - Should the rules be committed for the team (shared: in `AGENTS.md`) or stay yours (local: in `AGENTS.local.md`)? Personal values stay in `AGENTS.local.md` either way. Default: local.
    - Only when local and no `AGENTS.md` exists yet: should the new `AGENTS.md` be committed? It holds the pointer to `AGENTS.local.md` now, and whatever other tools add later (setup skills often write a section there). Default: no.
 
-Then one question per **Question** field in section 6, in its order, numbered from 3. Entries marked as parts of one question become its parts (7a, 7b). If entries were removed, renumber.
+Then one question per **Question** field in section 6, in its order, numbered from 3. Entries marked as parts of one question become its parts (7a, 7b).
 
 Done when every question that applies is answered.
 
