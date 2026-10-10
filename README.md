@@ -30,7 +30,7 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
 <!-- agents-repo-setup -->
 # Agent instructions
 
-Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity, chat language) are in `AGENTS.local.md`.
+Standing rules for every agent working here. Personal values are in `AGENTS.local.md`.
 
 ## Workflow
 

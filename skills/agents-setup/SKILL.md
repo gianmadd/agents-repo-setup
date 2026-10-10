@@ -26,24 +26,39 @@ Done when every item above has an answer, "absent" included.
 
 ## 2. Ask
 
-Ask every question in one chat message, in plain text (no multiple-choice tool). Open it with what step 1 found, at most five short lines: agents, repo (or workspace) and remote, GitHub accounts, Azure, existing instruction files. Then each question in this shape, a blank line between questions:
+Ask every question in one chat message, in plain text (no multiple-choice tool). Open it with what step 1 found, at most five short lines: agents, repo (or workspace) and remote, GitHub accounts, Azure, existing instruction files. Then each question in this shape:
 
 ```md
-**3. Skills and plugins**
+---
+
+### 3. Skills and plugins
+
 <one or two sentences: what it decides and what changes with each answer, for a user who has never seen this setup>
-a) <option> (default)
-b) <option>
-c) other: tell me
+
+<what the question needs shown, if anything: a map, a list of entries>
+
+**3a. <the question itself, in a few words>**
+- a) <option> **(default)**
+- b) <option>
+- c) other: tell me
+
+**3b. <second part, only when the question has one>**
+- …
 ```
 
-One option per line, a few words each; keep your own opinion out of it. End the message with one line: "Answer by number, or 'ok' to keep every default."
+- A `---` line before every question, a blank line between its parts.
+- The options always come last, right under the line that asks, so the user sees what to answer without hunting for it. Anything to read first goes above that line.
+- A question with two parts numbers them (**2a.**, **2b.**), each with its own options; a single-part question's bold line has no number, since the heading carries it.
+- One option per line, a few words each; keep your own opinion out of it.
+
+End the message with: "Answer like `1 a, 3b none, 6 c`, or 'ok' to keep every default."
 
 The user answers per number, and "ok" takes every default. Follow up on anything unclear until every answer is settled. On a re-run, the current choice is the default. When text the user already has outside the markers (step 1's instruction files) answers a question, that is the default, marked with its source: "commits in Italian (from your `CLAUDE.md`)". The agents chosen in question 1 shape the others: install commands, switch-offs and subagent lines cover only those agents.
 
 1. **Agents**: Which agents work in this repo? Options: the installed ones. Default: all installed.
-2. **Local or shared** (skip it in a workspace: nothing there is committed; rules go to `AGENTS.md`, personal values to `AGENTS.local.md`, as in a shared repo): Should the rules be committed for the team (shared: in `AGENTS.md`) or stay yours (local: in `AGENTS.local.md`)? Personal values stay in `AGENTS.local.md` either way. Default: local.
-   Local, and no `AGENTS.md` exists yet: should the new `AGENTS.md` be committed? It holds the pointer to `AGENTS.local.md` now, and whatever other tools add later (`setup-matt-pocock-skills` writes its section there). Default: no.
-3. **Skills and plugins**: Which of the default skills and plugins should this repo use? First show what the defaults give, as this list:
+2. **Local or shared**, two parts (skip it in a workspace: nothing there is committed; rules go to `AGENTS.md`, personal values to `AGENTS.local.md`, as in a shared repo): (2a) Should the rules be committed for the team (shared: in `AGENTS.md`) or stay yours (local: in `AGENTS.local.md`)? Personal values stay in `AGENTS.local.md` either way. Default: local.
+   (2b) Only when local and no `AGENTS.md` exists yet: should the new `AGENTS.md` be committed? It holds the pointer to `AGENTS.local.md` now, and whatever other tools add later (`setup-matt-pocock-skills` writes its section there). Default: no.
+3. **Skills and plugins**, two parts. (3a) Which of the default skills and plugins should this repo use? First show what the defaults give, as this list:
    ```md
    New features, one step at a time; you start each step, the agent suggests the next:
    1. `grill-with-docs`: interviews you until the design is settled
@@ -53,12 +68,12 @@ The user answers per number, and "ok" takes every default. Follow up on anything
    Ponytail is always on: the agent writes the least code that fully solves the task.
    ```
    Then list each entry of defaults.md, marked installed or missing per agent. Default: all.
-   Then: Do you want to add others? List the installed skills and plugins outside the defaults grouped by source, one line per group, names only: one group per skill package in `npx skills ls -g` (e.g. mattpocock/skills), one per agent's plugins, one for the repo's own skills. Leave out this setup itself. The user can ask what any name does. For each one added, ask when it is used and whether the user starts it.
+   (3b) Do you want to add others? First list the installed skills and plugins outside the defaults grouped by source, one line per group, names only: one group per skill package in `npx skills ls -g` (e.g. mattpocock/skills), one per agent's plugins, one for the repo's own skills. Leave out this setup itself. The user can ask what any name does. For each one added, ask when it is used and whether the user starts it.
 4. **Subagents**: Which model and effort should subagents use, per agent? Default: from defaults.md.
 5. **GitHub account**: Only when the remote is on GitHub (in a workspace: any sub-repo's remote); otherwise skip it and leave out the GitHub lines. In a workspace, when sub-repos belong to different owners, ask whether one account covers them all. Which GitHub account does this repo use? Options: the accounts in `gh auth status`; ask even when there is only one. Default: the one matching `git config user.email` (a GitHub noreply email carries the account name), else the active one. When the chosen account and `git config user.email` disagree, warn the user; git config is theirs to change. When the remote is SSH or git's credential helper is not `gh auth git-credential`, tell the user the rule covers only `gh`: git authenticates with their SSH key or helper.
 6. **Git permissions**: What may the agent do with git and GitHub without asking? Options: the three levels in defaults.md. Default: (b).
-7. **Azure**: two independent parts, each default no. (a) Resources: does the code run on or read Azure resources? If yes: tenant, subscription and user (default: from `az account show`). (b) Azure DevOps: do the work items live on Azure DevOps? If yes: org and project (default: from `az devops configure --list`).
-8. **Language**: Which language for chat, and which for code, comments and commits? Default: English for both.
+7. **Azure**: two independent parts, each default no. (7a) Resources: does the code run on or read Azure resources? If yes: tenant, subscription and user (default: from `az account show`). (7b) Azure DevOps: do the work items live on Azure DevOps? If yes: org and project (default: from `az devops configure --list`).
+8. **Language**, two parts. (8a) Which language for chat? (8b) Which for code, comments and commits? Default: English for both.
 
 Done when every question that applies is answered.
 
@@ -105,7 +120,7 @@ If the rules are local and Codex is in use, tell the user Codex loads them only 
 
 If a Codex switch-off was written and the project is not trusted in `~/.codex/config.toml`, tell the user Codex ignores `.codex/config.toml` until they trust the project.
 
-Report what was written, where, and anything the user skipped. Put the to-dos above first, as a numbered list. Close with how to use it, covering only what was kept:
+Report what was written, where, and anything the user skipped. Put the to-dos above first, under a **To do** heading, as a numbered list. Close with how to use it, covering only what was kept:
 
 ```md
 **How to use it**
