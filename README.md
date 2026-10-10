@@ -103,9 +103,19 @@ Subagents use the model and effort below: pass both explicitly at every spawn.
 ## Git
 
 - Allowed without asking: creating branches, local commits.
-- Ask first: push, opening or merging PRs, merging to main, creating or editing issues.
+- Ask first: push, opening or merging PRs, merging to main, creating or editing work items.
 
 Prefix every `gh` command, and every `git` command that reaches GitHub, with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; …
+
+## Azure resources
+
+- They live in tenant `your-tenant`, subscription `your-subscription`. Before any `az` command that touches them (anything but `az devops`, `az boards`, `az repos`, `az pipelines`), check `az account show` against these and the user in `AGENTS.local.md`; …
+- Read-only: any write needs the user's explicit confirmation, whatever the git permissions say. …
+
+## Azure DevOps
+
+- Work items live in org `https://dev.azure.com/your-org`, project `your-project`; a bare number like "task 420" is a work item there. …
+- Reading is free; creating or editing work items needs the user's explicit confirmation.
 
 ## Language
 
@@ -123,6 +133,7 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 ```md
 <!-- agents-repo-setup -->
 - GitHub account: `your-account`
+- Azure user: `you@example.com`
 - Chat language: English
 <!-- /agents-repo-setup -->
 ```

@@ -312,7 +312,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```md
   ## Azure DevOps
 
-  - Work items live in org `<org url>`, project `<project>`; a bare number like "task 699" is a work item there. Use the `azure-devops` MCP server if available, else pass `--org` and `--project` on every `az devops`, `az boards`, `az repos` and `az pipelines` call.
+  - Work items live in org `<org url>`, project `<project>`; a bare number like "task 420" is a work item there. Use the `azure-devops` MCP server if available, else pass `--org` and `--project` on every `az devops`, `az boards`, `az repos` and `az pipelines` call.
   - Reading is free; creating or editing work items needs the user's explicit confirmation.
   ```
   In the Git section, say "work items" instead of "issues".
