@@ -199,12 +199,12 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   ```json
   {
     "permissions": {
-      "allow": ["Edit", "Bash(git *)", "Bash(<each test, build and run command>)", "Bash(ls *)", "Bash(cat *)", "Bash(head *)", "Bash(tail *)", "Bash(grep *)", "Bash(find *)", "Bash(wc *)", "Bash(pwd)", "Bash(lsof *)", "Bash(kill *)"],
+      "allow": ["Edit", "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git show*)", "Bash(git rev-parse*)", "Bash(git branch)", "Bash(git branch --show-current)", "Bash(git switch*)", "Bash(git checkout -b*)", "Bash(git add*)", "Bash(git commit*)", "Bash(git merge*)", "Bash(git worktree*)", "Bash(<each test, build and run command>)", "Bash(ls *)", "Bash(cat *)", "Bash(head *)", "Bash(tail *)", "Bash(grep *)", "Bash(find *)", "Bash(wc *)", "Bash(pwd)", "Bash(lsof *)", "Bash(kill *)"],
       "ask": ["Bash(git push*)", "Bash(git reset --hard*)", "Bash(git clean*)", "Bash(git branch -D*)", "Bash(git rebase*)"]
     }
   }
   ```
-  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`); add `Bash(playwright-cli *)` with the web UI check and `Bash(adb *)` with Android. `ask` wins over `allow`. With git level (a), allow only reading git (`git status`, `diff`, `log`, `show`) instead of `Bash(git *)`; with level (c), ask only for `git push --force*` and `git push * main*`, not every push.
+  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`); add `Bash(playwright-cli *)` with the web UI check and `Bash(adb *)` with Android. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*` and `git push * main*`.
 - **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; push and destructive git still ask you.
 
 #### Skill nudge
