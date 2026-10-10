@@ -1,25 +1,25 @@
 # Agents Repo Setup
 
-Uno strumento che, lanciato dentro un repo, gli dà una base fissa di istruzioni per gli agenti di coding, così non vanno ripetute a ogni sessione.
+A tool that, run inside a repo, gives it a fixed base of instructions for coding agents, so they don't have to be repeated every session.
 
 ## Language
 
 **Setup**:
-La skill che si lancia una volta in un repo e scrive le Istruzioni del repo dopo aver verificato i Prerequisiti.
+The skill you run once in a repo; it writes the Repo instructions after checking the Prerequisites.
 _Avoid_: installer, bootstrap, init
 
-**Istruzioni del repo**:
-Il blocco di regole scritto dal Setup, letto da ogni agente: in `AGENTS.md` se il repo è condiviso, in `AGENTS.local.md` se è locale. `AGENTS.md` ha sempre un rimando ad `AGENTS.local.md`; il Setup non crea mai un `CLAUDE.md`.
-_Avoid_: prompt, config, regole globali
+**Repo instructions**:
+The block of rules the Setup writes and every agent reads: in `AGENTS.md` if the repo is shared, in `AGENTS.local.md` if it is local. `AGENTS.md` always holds a pointer to `AGENTS.local.md`; the Setup never creates a `CLAUDE.md`.
+_Avoid_: prompt, config, global rules
 
-**Valori personali**:
-Gli account e le identità dell'utente (account GitHub, utente Azure) che le Istruzioni del repo citano ma non contengono; stanno sempre in `AGENTS.local.md`, mai committato.
-_Avoid_: segreti, credenziali, config locale
+**Personal values**:
+The user's accounts, identities and preferences (GitHub account, Azure user, chat language) that the Repo instructions refer to but do not contain; they always live in `AGENTS.local.md`, never committed.
+_Avoid_: secrets, credentials, local config
 
-**Configurazione di default**:
-L'insieme di skill, plugin e regole che il Setup usa come risposta di default alle sue domande, e che l'utente tiene, cambia o integra repo per repo; ogni skill o plugin indica quando usarlo, come si attiva, come si installa e come si spegne nel repo.
-_Avoid_: configurazione consigliata, catalogo, preset
+**Default configuration**:
+The skills, plugins and rules the Setup offers as the default answer to its questions, which the user keeps, changes or extends repo by repo; each skill or plugin states when to use it, how it starts, how to install it and how to switch it off in the repo.
+_Avoid_: recommended configuration, catalog, preset
 
-**Prerequisito**:
-Una skill o un plugin che le Istruzioni del repo nominano e che deve essere installato perché funzionino.
-_Avoid_: dipendenza, requirement
+**Prerequisite**:
+A skill, plugin or tool that the Repo instructions name and that must be installed for them to work.
+_Avoid_: dependency, requirement
