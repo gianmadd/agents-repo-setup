@@ -9,11 +9,11 @@ La skill che si lancia una volta in un repo e scrive le Istruzioni del repo dopo
 _Avoid_: installer, bootstrap, init
 
 **Istruzioni del repo**:
-Il blocco scritto dal Setup in `AGENTS.md`, letto da ogni agente; in un repo locale con un `AGENTS.md` del team va invece in `CLAUDE.local.md`.
+Il blocco di regole scritto dal Setup, letto da ogni agente: in `AGENTS.md` se il repo è condiviso, in `AGENTS.local.md` se è locale. `AGENTS.md` ha sempre un rimando ad `AGENTS.local.md`; il Setup non crea mai un `CLAUDE.md`.
 _Avoid_: prompt, config, regole globali
 
 **Valori personali**:
-Gli account e le identità dell'utente (account GitHub, tenant e utente Azure) che le Istruzioni del repo citano ma non contengono; stanno in `AGENTS.local.md`, mai committato.
+Gli account e le identità dell'utente (account GitHub, tenant e utente Azure) che le Istruzioni del repo citano ma non contengono; stanno sempre in `AGENTS.local.md`, mai committato.
 _Avoid_: segreti, credenziali, config locale
 
 **Configurazione di default**:

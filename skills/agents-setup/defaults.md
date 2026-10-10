@@ -1,15 +1,26 @@
 # Default configuration
 
-The defaults behind `agents-setup`'s questions; the user keeps, changes or drops each one. The fenced blocks are the text written to `AGENTS.md` (or to `AGENTS.local.md` where marked); `<angle brackets>` are filled from the answers. Fork this file to change the defaults.
+The defaults behind `agents-setup`'s questions; the user keeps, changes or drops each one. The fenced blocks are the text written to the rules block (or to `AGENTS.local.md` where marked); `<angle brackets>` are filled from the answers. Fork this file to change the defaults.
+
+## Pointer
+
+Always written to `AGENTS.md`, inside the markers, so every agent also loads `AGENTS.local.md`: Claude Code through the `@` import, other agents by following the sentence.
+
+```md
+## Personal instructions
+
+Before your first reply or action, read `AGENTS.local.md` next to this file, if it exists, and follow it as part of these instructions: @AGENTS.local.md
+It holds this checkout's personal rules; it is not committed and not every agent loads it on its own. In a worktree, read it from the main checkout root, `$(git rev-parse --path-format=absolute --git-common-dir)/..`.
+```
 
 ## Header
 
-Always written, first in the block.
+Always written, first in the rules block.
 
 ```md
 # Agent instructions
 
-Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity) live in `AGENTS.local.md` at the main checkout root, `$(git rev-parse --path-format=absolute --git-common-dir)/..`: it is not committed, and worktrees don't have their own copy.
+Standing rules for every agent working in this repo. Personal values (GitHub account, Azure identity) are in `AGENTS.local.md`.
 ```
 
 ## Skills and plugins
@@ -77,19 +88,24 @@ Subagents run on a cheaper model than the main session: pass model and effort ex
 
 ### Git
 
-- Default: GitHub through `gh`, account chosen by the user; permission level (b).
+- Default: permission level (b). The GitHub lines only when the remote is on GitHub, with the account chosen by the user.
 - Permission levels: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed, push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main.
 
 ```md
 ## Git
 
-`gh` uses whichever account is active on this machine, which may not be this repo's.
-
-- Run every gh command as `GH_TOKEN=$(gh auth token -u <account>) gh …`, with `<account>` from `AGENTS.local.md`.
 - <permission level as two lines: "Allowed without asking: …" and "Ask first: …">
 ```
 
-`AGENTS.local.md`:
+GitHub remote only, appended to the section:
+
+```md
+This machine's active GitHub account, which may not be this repo's, is used by `gh`<" and by git through its `gh` credential helper">. Prefix every `gh` command<", and every `git` command that reaches GitHub (push, pull, fetch),"> with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; if it is missing, ask the user.
+```
+
+The quoted parts only when the remote is HTTPS and git's credential helper is `gh auth git-credential`: `GH_TOKEN` reaches git only through that helper.
+
+`AGENTS.local.md`, GitHub remote only:
 
 ```md
 - GitHub account: `<account>`
