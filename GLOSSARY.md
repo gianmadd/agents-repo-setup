@@ -13,7 +13,7 @@ Il blocco di regole scritto dal Setup, letto da ogni agente: in `AGENTS.md` se i
 _Avoid_: prompt, config, regole globali
 
 **Valori personali**:
-Gli account e le identità dell'utente (account GitHub, tenant e utente Azure) che le Istruzioni del repo citano ma non contengono; stanno sempre in `AGENTS.local.md`, mai committato.
+Gli account e le identità dell'utente (account GitHub, utente Azure) che le Istruzioni del repo citano ma non contengono; stanno sempre in `AGENTS.local.md`, mai committato.
 _Avoid_: segreti, credenziali, config locale
 
 **Configurazione di default**:

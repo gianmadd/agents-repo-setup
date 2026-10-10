@@ -115,22 +115,32 @@ The quoted parts only when the remote is HTTPS and git's credential helper is `g
 - GitHub account: `<account>`
 ```
 
-### Azure
+### Azure resources
 
-- Default: off; written only when the user says the repo uses Azure.
+- Default: off; written only when the code runs on or reads Azure resources.
 
 ```md
-## Azure
+## Azure resources
 
-- Before any `az` command, compare `az account show` with the tenant, subscription and user in `AGENTS.local.md`. On a mismatch stop and tell the user; logging in is the user's job.
-- Azure DevOps: org `<org url>`, project `<project>`. Pass both explicitly on every `az devops`, `az boards` and `az repos` call.
-- Azure resources (Cosmos DB, databases, storage…) are read-only: any write needs the user's explicit confirmation, whatever the git permissions say.
+- They live in tenant `<tenant>`, subscription `<subscription>`. Before any `az` command that touches them (anything but `az devops`, `az boards`, `az repos`, `az pipelines`), check `az account show` against these and the user in `AGENTS.local.md`. On a mismatch stop and tell the user to run `az login --tenant <tenant>`: logging in is their job.
+- Read-only: any write needs the user's explicit confirmation, whatever the git permissions say. Never print secret values, keys or connection strings.
 ```
 
 `AGENTS.local.md`:
 
 ```md
-- Azure: tenant `<tenant>`, subscription `<subscription>`, user `<user>`
+- Azure user: `<user>`
+```
+
+### Azure DevOps
+
+- Default: off; written only when the repo's work items live on Azure DevOps. Independent of Azure resources: the board can sit in another tenant, and `az devops` does not follow the active subscription.
+
+```md
+## Azure DevOps
+
+- Work items live in org `<org url>`, project `<project>`; a bare number like "task 699" is a work item there. Use the `azure-devops` MCP server if available, else pass `--org` and `--project` on every `az devops`, `az boards`, `az repos` and `az pipelines` call.
+- Reading is free; creating or editing work items needs the user's explicit confirmation.
 ```
 
 ### Language

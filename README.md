@@ -16,7 +16,7 @@ Everything lives in the repo: no global instructions, because accounts, Azure te
    4. subagent model and effort, per agent
    5. GitHub account for this repo, when the remote is on GitHub (asked even with one account)
    6. git permissions: read-only / local commits free, push and PRs on confirmation / everything except pushing to main
-   7. Azure: tenant, subscription, user, Azure DevOps org and project, if the repo uses Azure
+   7. Azure, in two independent parts: resources (tenant, subscription, user) and Azure DevOps (org and project of the work items)
    8. language for chat and for code
 3. **Prerequisites**: anything missing is installed after your ok; a default plugin you dropped is switched off for this repo only.
 4. **Write**: shows every file (or the diff on a re-run) and writes after your ok.
@@ -77,7 +77,7 @@ It holds this checkout's personal rules; it is not committed and not every agent
 ```md
 <!-- agents-repo-setup -->
 - GitHub account: `your-account`
-- Azure: tenant `…`, subscription `…`, user `…`
+- Azure user: `…`
 <!-- /agents-repo-setup -->
 ```
 
