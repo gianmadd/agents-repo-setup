@@ -2,7 +2,7 @@
 
 Stop re-explaining your workflow to coding agents at the start of every session.
 
-`agents-setup` is a skill you run once per repo. It asks eight questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git and how it names branches and writes commits, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
+`agents-setup` is a skill you run once per repo. It asks nine questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git and how it names branches and writes commits, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
 
 ## Quick start
 
@@ -30,7 +30,7 @@ A feature workflow built on [mattpocock/skills](https://github.com/mattpocock/sk
 | | `/implement-spec` | subagents build the tickets with TDD; the final review runs `code-review` and `ponytail-review` on its own |
 | fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the workflow |
 | keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
-| check a UI change | nothing | before saying it's done, the agent opens the app with [playwright-cli](https://github.com/microsoft/playwright-cli), tries the flow and reads the console |
+| check a UI change | nothing | before saying it's done, the agent runs the app, in the browser with [playwright-cli](https://github.com/microsoft/playwright-cli) or on the Android emulator with `adb`, tries the flow and reads the errors |
 
 First time in a repo, run `/setup-matt-pocock-skills` too: it tells the workflow where the issues live. The setup reminds you.
 
@@ -42,12 +42,13 @@ One message, every question with its options and a default:
 |---|---|---|
 | 1 | which agents work in the repo | all installed |
 | 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only | yours only |
-| 3 | which skills and plugins, and any others you have installed | the workflow, ponytail and the UI check (off in repos with code but no web UI) |
-| 4 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
-| 5 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
-| 6 | what the agent may do with git without asking; how it names branches and writes commits and PRs | branches and local commits; `feat/420-login-page`, short explanatory messages |
-| 7 | Azure resources and Azure DevOps | no |
-| 8 | language for chat, and for code and commits | English |
+| 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
+| 4 | how the agent checks UI changes running: web with `playwright-cli`, Android with `adb`, both or none; always asked | what the repo has; web in a new repo |
+| 5 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
+| 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
+| 7 | what the agent may do with git without asking; how it names branches and writes commits and PRs | branches and local commits; `feat/420-login-page`, short explanatory messages |
+| 8 | Azure resources and Azure DevOps | no |
+| 9 | language for chat, and for code and commits | English |
 
 Before writing, it lists what goes in each file and waits for your ok. Anything missing is installed only after your ok.
 
@@ -97,7 +98,9 @@ Write and review code the ponytail way: the plugin loads it every session.
 
 ## UI check
 
-Before calling a UI change done, start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. …
+Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button.
+
+- Web: start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. …
 
 ## Subagents
 

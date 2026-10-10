@@ -219,27 +219,30 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   Without the feature workflow, the last line reads "Reviews: `ponytail-review`."
 - **How to use**: Ponytail is always on: no command needed.
 
-#### UI check (microsoft/playwright-cli)
-
-- **Explore**: whether the repo has a web UI: a frontend framework in `package.json` (React, Vue, Svelte, Angular, Next…), or `.html`, `.razor`, `.cshtml` files outside dependencies.
-- **Default**: on, unless the repo already has code and none of it is a web UI. A new or empty repo keeps it on: its UI may not exist yet.
-- **Shown in the question**: Before calling a UI change done, the agent opens the app in a browser, tries the flow and reads the console: tests don't see a blank page or a hidden button.
-- **Prerequisites**: command `playwright-cli` (Node 18+); skill `playwright-cli` (`npx skills ls -g`); a browser: Google Chrome, which `playwright-cli` uses by default, or Playwright's Chromium (`chromium-*` in Playwright's browser cache, `~/Library/Caches/ms-playwright` on macOS).
-- **Install** (every agent): `npm install -g @playwright/cli@latest`, then `npx skills add microsoft/playwright-cli -g -y -s playwright-cli`; without Google Chrome, `playwright-cli install-browser chromium` too, and offer `export PLAYWRIGHT_MCP_BROWSER=chromium` in the user's shell profile so it becomes the default.
-- **Writes**:
-  ```md
-  ## UI check
-
-  Before calling a UI change done, start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. Passing tests don't show a blank page or a hidden button. If Google Chrome is missing, pass `--browser=chromium`.
-  ```
-- **How to use**: UI changes: the agent checks them in the browser on its own before saying they're done.
-
 #### Added by the user
 
 - **Writes**: one line per skill or plugin: when to use it, by name; "suggest `<name>`" if the user starts it, else "use `<name>`". It goes at the end of the Workflow section, or in a `## Skills` section of its own when the feature workflow is dropped.
 - **How to use**: one line per skill: when to use it.
 
 ### Rules
+
+#### UI check
+
+- **Explore**: what UI the repo has. Web: a frontend framework in `package.json` (React, Vue, Svelte, Angular, Next…), or `.html`, `.razor`, `.cshtml` files outside dependencies. Android: an `AndroidManifest.xml`, or the `com.android.application` plugin in a Gradle file.
+- **Question**: always asked, whatever was found. How should the agent check UI changes before calling them done? Say what was found and where ("Android app in `app/`"). Options: (a) web, with `playwright-cli`; (b) Android, with `adb`; (c) both; (d) none.
+- **Default**: what was found: web, Android, or both; none when the repo has code but no UI; web in a new or empty repo.
+- **Prerequisites**: web, command `playwright-cli` (Node 18+), skill `playwright-cli` (`npx skills ls -g`), and a browser: Google Chrome, which `playwright-cli` uses by default, or Playwright's Chromium (`chromium-*` in Playwright's browser cache, `~/Library/Caches/ms-playwright` on macOS). Android, `adb` (Android platform-tools).
+- **Install** (every agent): web, `npm install -g @playwright/cli@latest`, then `npx skills add microsoft/playwright-cli -g -y -s playwright-cli`; without Google Chrome, `playwright-cli install-browser chromium` too, and offer `export PLAYWRIGHT_MCP_BROWSER=chromium` in the user's shell profile so it becomes the default. Android, `brew install --cask android-platform-tools` (other systems: https://developer.android.com/tools/releases/platform-tools).
+- **Writes**, the web line, the Android line, or both:
+  ```md
+  ## UI check
+
+  Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button.
+
+  - Web: start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. If Google Chrome is missing, pass `--browser=chromium`.
+  - Android: install the app on a running emulator or device (`adb devices`; `./gradlew installDebug`, or how the repo builds), walk through the changed flow with `adb` (`shell uiautomator dump` to find elements, `shell input tap` and `shell input text`, `exec-out screencap -p` for a screenshot) and check `adb logcat` for crashes. With no device running, start an emulator if one is configured, else ask the user.
+  ```
+- **How to use**: UI changes: the agent checks them running, in the browser or on the emulator, before saying they're done.
 
 #### Subagents
 
