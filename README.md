@@ -46,7 +46,7 @@ Before writing, it lists what goes in each file and waits for your ok. Anything 
 
 ## Where the rules go
 
-Two files, never a `CLAUDE.md`:
+Two files:
 
 - `AGENTS.md`: what belongs to the project.
 - `AGENTS.local.md`: what belongs to you (GitHub account, Azure user, chat language). Never committed.
