@@ -18,7 +18,7 @@ Read-only. Gather:
 
 - Agents installed: `which claude codex cursor gemini copilot`.
 - Whether the folder is a git repo. If not but its subfolders hold git repos, it is a **workspace** (one folder, several repos, agents launched from the folder): run every repo check in each sub-repo. If neither, it is a **plain folder**: maybe a new project before `git init`.
-- `AGENTS.md`, `AGENTS.local.md`, `CLAUDE.md`, `CLAUDE.local.md` at the repo root, whether `AGENTS.md` is tracked (`git ls-files AGENTS.md`), and whether any holds an `<!-- agents-repo-setup -->` block. If one does, this is a re-run: its current choices become the defaults in step 2. A block in `CLAUDE.local.md` comes from an older version of this setup: step 4 moves it.
+- `AGENTS.md`, `AGENTS.local.md`, `CLAUDE.md` at the repo root, whether `AGENTS.md` is tracked (`git ls-files AGENTS.md`), and whether any holds an `<!-- agents-repo-setup -->` block. If one does, this is a re-run: its current choices become the defaults in step 2.
 - Installed skills and plugins: `npx skills ls -g`, `.agents/skills/` and `.claude/skills/` in the repo, the agents' global skill folders (`~/.claude/skills/`, `~/.codex/skills/`, `~/.agents/skills/`) for skills installed by their own installers (skip hidden folders, `~/.claude/skills/synced/`, which holds claude.ai's own skills, and links into `~/.agents/skills/`, already listed by `npx skills`), `claude plugin list` and `~/.codex/config.toml` for the agents present.
 - The **Explore** field of every entry in section 6.
 
@@ -104,7 +104,7 @@ When a `CLAUDE.md` exists, Claude Code reads it instead of `AGENTS.md` unless it
 
 When `AGENTS.md`, `AGENTS.local.md` or `CLAUDE.md` already holds text outside the markers, compare it with the new blocks. Mention in one line what it repeats, and leave it. For what contradicts an answer the user gave against their own text, ask how to merge: change their text to match the answer (default), keep both and drop that rule from the block, or rewrite. Never edit their text without an ok; in a team file, an edit is a committed change.
 
-On a re-run, replace only the text between the markers. A block left in `CLAUDE.local.md` by an older version: remove it, delete the file if nothing else is left, and drop its line from `.git/info/exclude`. Before writing, show per file: its path, whether it is committed, and one line per section it gets ("Git: local commits free, push and PRs on confirmation"); on a re-run, the diff instead. Show a full block only when the user asks. Write after their ok. The setup never commits: what should be committed goes in step 5's To do.
+On a re-run, replace only the text between the markers. Before writing, show per file: its path, whether it is committed, and one line per section it gets ("Git: local commits free, push and PRs on confirmation"); on a re-run, the diff instead. Show a full block only when the user asks. Write after their ok. The setup never commits: what should be committed goes in step 5's To do.
 
 ## 5. Finish
 
