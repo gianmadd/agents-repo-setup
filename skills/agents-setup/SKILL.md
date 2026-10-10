@@ -204,8 +204,8 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
     }
   }
   ```
-  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check, `Bash(maestro *)` with Android or iOS, `Bash(adb *)` with Android, `Bash(xcrun simctl *)` with iOS, and `Bash(peekaboo *)`, `Bash(xcodebuild *)` with macOS. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*` and `git push * main*`.
-- **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; push and destructive git still ask you.
+  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check, `Bash(maestro *)` with Android or iOS, `Bash(adb *)` with Android, `Bash(xcrun simctl *)` with iOS, and `Bash(peekaboo *)`, `Bash(xcodebuild *)` with macOS. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*` and `git push * main*`; with level (d), replace the git commands with `Bash(git *)` and drop `ask`.
+- **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; the git commands not pre-approved still ask you.
 
 #### Skill nudge
 
@@ -305,7 +305,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 - **Question**: Git, two parts; this is the first. What may the agent do with git and GitHub without asking?
 - **Default**: (b).
-- **Options**: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed; push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main and merging PRs into main.
+- **Options**: (a) read-only: anything that writes to git or GitHub needs confirmation; (b) branches and local commits allowed; push, PRs, merge to main and issue changes need confirmation; (c) everything allowed except pushing to main and merging PRs into main; (d) everything allowed, with no confirmation.
 - **Writes**, not in a plain folder (no git):
   ```md
   ## Git
@@ -314,7 +314,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   - Ask first: <level>.
   - Always ask first, whatever the above allows: `push --force`, `reset --hard`, `branch -D`, `clean`, and rewriting pushed commits. They lose work.
   ```
-  The two lines per level: (a) nothing / any command that writes to git or GitHub; (b) creating and switching branches, local commits / push, opening or merging PRs, merging to main, creating or editing issues; (c) branches, commits, push to branches other than main, opening and merging PRs into other branches, creating or editing issues / pushing to main, merging PRs into main. The third line not with (a): it already asks for everything.
+  The two lines per level: (a) nothing / any command that writes to git or GitHub; (b) creating and switching branches, local commits / push, opening or merging PRs, merging to main, creating or editing issues; (c) branches, commits, push to branches other than main, opening and merging PRs into other branches, creating or editing issues / pushing to main, merging PRs into main; (d) everything, main and destructive commands included / nothing. With (d), only the first line; the third line not with (a): it already asks for everything.
   In a workspace, appended:
   ```md
   This folder is not a git repo: run git and `gh` inside the sub-repo concerned (`git -C <repo> …`). Sub-repos: <list>.
