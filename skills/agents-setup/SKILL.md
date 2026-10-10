@@ -19,7 +19,7 @@ Read-only. Gather:
 - `AGENTS.md`, `AGENTS.local.md`, `CLAUDE.md`, `CLAUDE.local.md` at the repo root, whether `AGENTS.md` is tracked (`git ls-files AGENTS.md`), and whether any holds an `<!-- agents-repo-setup -->` block. If one does, this is a re-run: its current choices become the defaults in step 2. A block in `CLAUDE.local.md` comes from an older version of this setup: step 4 moves it.
 - `git remote -v` (host: GitHub or not; protocol: HTTPS or SSH), `git config --get-all credential.helper` and `git config --get-all credential.https://github.com.helper`, `git config user.email`, `gh auth status` (the logged-in accounts).
 - `az account show` and `az devops configure --list`, if `az` is installed.
-- Installed skills and plugins: `npx skills ls -g`, `.agents/skills/` and `.claude/skills/` in the repo, `claude plugin list` and `~/.codex/config.toml` for the agents present.
+- Installed skills and plugins: `npx skills ls -g`, `.agents/skills/` and `.claude/skills/` in the repo, the agents' global skill folders (`~/.claude/skills/`, `~/.codex/skills/`, `~/.agents/skills/`) for skills installed by their own installers, `claude plugin list` and `~/.codex/config.toml` for the agents present.
 - Whether `docs/agents/` exists (`setup-matt-pocock-skills` has run).
 
 Done when every item above has an answer, "absent" included.
@@ -70,16 +70,16 @@ The user answers per number, and "ok" takes every default. Follow up on anything
    Then list each entry of defaults.md, marked installed or missing per agent. Default: all.
    (3b) Do you want to add others? First list the installed skills and plugins outside the defaults grouped by source, one line per group, names only: one group per skill package in `npx skills ls -g` (e.g. mattpocock/skills), one per agent's plugins, one for the repo's own skills. Leave out this setup itself. The user can ask what any name does. For each one added, ask when it is used and whether the user starts it.
 4. **Subagents**: Which model and effort should subagents use, per agent? Default: from defaults.md.
-5. **GitHub account**: Only when the remote is on GitHub (in a workspace: any sub-repo's remote); otherwise skip it and leave out the GitHub lines. In a workspace, when sub-repos belong to different owners, ask whether one account covers them all. Which GitHub account does this repo use? Options: the accounts in `gh auth status`; ask even when there is only one. Default: the one matching `git config user.email` (a GitHub noreply email carries the account name), else the active one. When the chosen account and `git config user.email` disagree, warn the user; git config is theirs to change. When the remote is SSH or git's credential helper is not `gh auth git-credential`, tell the user the rule covers only `gh`: git authenticates with their SSH key or helper.
+5. **GitHub account**: Only when the remote is on GitHub (in a workspace: any sub-repo's remote); otherwise skip it and leave out the GitHub lines. In a workspace, when sub-repos belong to different owners, ask whether one account covers them all. Which GitHub account does this repo use? Options: the accounts in `gh auth status`; ask even when there is only one. With only one account, ask the user to confirm it, and say no prefix rule is written: it matters only when `gh` holds several accounts. Then leave out the GitHub lines; a re-run with more accounts brings them back. Default: the one matching `git config user.email` (a GitHub noreply email carries the account name), else the active one. When the chosen account and `git config user.email` disagree, warn the user; git config is theirs to change. When the remote is SSH or git's credential helper is not `gh auth git-credential`, tell the user the rule covers only `gh`: git authenticates with their SSH key or helper.
 6. **Git permissions**: What may the agent do with git and GitHub without asking? Options: the three levels in defaults.md. Default: (b).
-7. **Azure**: two independent parts, each default no. (7a) Resources: does the code run on or read Azure resources? If yes: tenant, subscription and user (default: from `az account show`). (7b) Azure DevOps: do the work items live on Azure DevOps? If yes: org and project (default: from `az devops configure --list`).
+7. **Azure**: two independent parts, each default no. (7a) Resources: does the code run on or read Azure resources? If yes: tenant, subscription and user (default: from `az account show`). (7b) Azure DevOps: do the work items live on Azure DevOps? If yes: org and project (default: from `az devops configure --list`). Ask it even when `az` is missing: say a yes needs the Azure CLI, which step 3 installs.
 8. **Language**, two parts. (8a) Which language for chat? (8b) Which for code, comments and commits? Default: English for both.
 
 Done when every question that applies is answered.
 
 ## 3. Prerequisites
 
-For each kept entry and each agent in use, check its prerequisites against what step 1 found. For each missing one, show the install command from defaults.md and run it only after the user's explicit ok. Re-check after installing.
+Never skip a question because a tool is missing: when an answer needs something not installed, say so in the question, and install it here. For each kept entry, each Azure part answered yes and each agent in use, check its prerequisites against what step 1 found. For each missing one, show the install command from defaults.md and run it only after the user's explicit ok. Re-check after installing.
 
 For a default plugin the user dropped but has installed, offer its switch-off for this repo from defaults.md, and write it after the user's ok.
 

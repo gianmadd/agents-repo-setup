@@ -128,6 +128,7 @@ Workspace with different accounts: ``- GitHub account: `<account>` for `<sub-rep
 ### Azure resources
 
 - Default: off; written only when the code runs on or reads Azure resources.
+- Prerequisite: Azure CLI (`az`). Install: see https://learn.microsoft.com/cli/azure/install-azure-cli (macOS: `brew install azure-cli`).
 
 ```md
 ## Azure resources
@@ -145,6 +146,7 @@ Workspace with different accounts: ``- GitHub account: `<account>` for `<sub-rep
 ### Azure DevOps
 
 - Default: off; written only when the repo's work items live on Azure DevOps. Independent of Azure resources: the board can sit in another tenant, and `az devops` does not follow the active subscription.
+- Prerequisite: Azure CLI with the `azure-devops` extension (`az extension list`). Install: the Azure CLI as above, then `az extension add --name azure-devops`.
 
 ```md
 ## Azure DevOps

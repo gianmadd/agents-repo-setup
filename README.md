@@ -2,29 +2,69 @@
 
 Stop re-explaining your workflow to coding agents at the start of every session.
 
-`agents-setup` is a skill you run once inside a repo. It asks a few questions, each with a default you can keep or change, and it writes a compact block of rules (about 40 lines) that every agent reads from then on: which skills to use when, which GitHub account, what the agent may do with git, the Azure context, subagent models, language.
+`agents-setup` is a skill you run once per repo. It asks eight questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
 
-Everything lives in the repo: no global instructions, because accounts, Azure tenants and skills differ from repo to repo.
+## Quick start
 
-## How the setup runs
+```sh
+npx skills add gianmadd/agents-repo-setup -g
+```
 
-1. **Explore**: reads the repo and your machine without changing anything: installed agents, existing `AGENTS.md` / `CLAUDE.md`, git remote, credential helper and identity, `gh` accounts, `az account show`, installed skills and plugins.
-2. **Ask**: one chat message that opens with what it found, then eight numbered questions; each explains what it decides, lists the options with a default and an open last option, and "ok" keeps every default:
-   1. which agents work in the repo (Claude Code, Codex, …): the rest adapts to them
-   2. local or shared (rules kept in your uncommitted `AGENTS.local.md`, or committed in `AGENTS.md`)
-   3. skills and plugins: keep the default ones, drop some, add others you have installed (grouped by source)
-   4. subagent model and effort, per agent
-   5. GitHub account for this repo, when the remote is on GitHub (asked even with one account)
-   6. git permissions: read-only / local commits free, push and PRs on confirmation / everything except pushing to main
-   7. Azure, in two independent parts: resources (tenant, subscription, user) and Azure DevOps (org and project of the work items)
-   8. language for chat and for code
-3. **Prerequisites**: anything missing is installed after your ok; a default plugin you dropped is switched off for this repo only.
-4. **Write**: shows what goes in each file, one line per section (the diff on a re-run), and writes after your ok.
-5. **Finish**: reminds you to run `setup-matt-pocock-skills` if the repo needs it, and closes with how to use what was set up.
+Then open an agent in the repo and run `/agents-setup` (Claude Code) or `$agents-setup` (Codex). Answer "ok" to keep every default.
 
-## What it writes
+## What you get
 
-`AGENTS.md`, the rules every agent reads (shortened):
+A feature workflow built on [mattpocock/skills](https://github.com/mattpocock/skills), with [ponytail](https://github.com/DietrichGebert/ponytail) for the code:
+
+| You want to… | You do | What happens |
+|---|---|---|
+| build a feature | start `/grill-with-docs` | the agent interviews you until the design is settled, then suggests each next step; you start it |
+| | `/to-spec` | the design becomes a spec on the issue tracker |
+| | `/to-tickets` | the spec becomes tickets, with what blocks what |
+| | `/implement-spec` | subagents build the tickets with TDD; the final review runs `code-review` and `ponytail-review` on its own |
+| fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the workflow |
+| keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
+
+First time in a repo, run `/setup-matt-pocock-skills` too: it tells the workflow where the issues live. The setup reminds you.
+
+## The questions
+
+One message, every question with its options and a default:
+
+| # | Decides | Default |
+|---|---|---|
+| 1 | which agents work in the repo | all installed |
+| 2 | rules shared with the team (committed) or yours only | yours only |
+| 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
+| 4 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
+| 5 | GitHub account (GitHub remotes only); with one account, just a confirmation | the one matching your git email |
+| 6 | what the agent may do with git without asking | branches and local commits |
+| 7 | Azure resources and Azure DevOps | no |
+| 8 | language for chat, and for code and commits | English |
+
+Before writing, it lists what goes in each file and waits for your ok. Anything missing is installed only after your ok.
+
+## Where the rules go
+
+Two files, never a `CLAUDE.md`:
+
+- `AGENTS.md`: what belongs to the project.
+- `AGENTS.local.md`: what belongs to you (GitHub account, Azure user, chat language). Never committed.
+
+| You chose | `AGENTS.md` | `AGENTS.local.md` |
+|---|---|---|
+| shared | the rules, committed | your values |
+| yours only | a pointer to `AGENTS.local.md` | the rules and your values |
+
+`AGENTS.md` always ends with a pointer that makes every agent read `AGENTS.local.md` too.
+
+- **Existing `CLAUDE.md`**: Claude Code reads only that file, so the setup offers to add `@AGENTS.md` to it.
+- **Existing instructions**: what they already say becomes the default answer (e.g. "commits in Italian, from your `CLAUDE.md`"), so the new rules don't contradict them.
+- **Workspace** (a folder holding several repos): both files go in the folder, nothing is committed, and each sub-repo can have its own GitHub account.
+- **Re-run**: the setup changes only the text between its `<!-- agents-repo-setup -->` markers.
+
+<details>
+<summary>Example <code>AGENTS.md</code> (shared rules, shortened)</summary>
 
 ```md
 <!-- agents-repo-setup -->
@@ -39,13 +79,13 @@ New features go through the mattpocock/skills pipeline, one step at a time. The 
 1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs.
 2. `to-spec`: turn the settled design into a spec on the issue tracker.
 3. `to-tickets`: split the spec into tickets with blocking relations.
-4. `implement-spec`: implement the tickets with subagents, TDD and a final review (`code-review` plus `ponytail-review`).
+4. `implement-spec`: implement the tickets with subagents, TDD and a final code review.
 
 ## Code
 
 Write and review code the ponytail way: the plugin loads it every session.
 
-- Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; keep their reports separate, then fix every finding of `code-review` and the "Must fix" and "Should fix" of `ponytail-review` in one implementer subagent. List the "Nice to have" for the user.
+- Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; …
 - Reviews outside the pipeline: `ponytail-review`.
 
 ## Subagents
@@ -59,7 +99,7 @@ Subagents use the model and effort below: pass both explicitly at every spawn.
 - Allowed without asking: creating branches, local commits.
 - Ask first: push, opening or merging PRs, merging to main, creating or editing issues.
 
-This machine's active GitHub account, which may not be this repo's, is used by `gh` and by git through its `gh` credential helper. Prefix every `gh` command, and every `git` command that reaches GitHub (push, pull, fetch), with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; if it is missing, ask the user.
+Prefix every `gh` command, and every `git` command that reaches GitHub, with `GH_TOKEN=$(gh auth token -u <account>)`, `<account>` from `AGENTS.local.md`; …
 
 ## Language
 
@@ -68,66 +108,28 @@ Code, comments and commits in English.
 ## Personal instructions
 
 Before your first reply or action, read `AGENTS.local.md` next to this file, if it exists, and follow it as part of these instructions: @AGENTS.local.md
-It holds this checkout's personal rules; it is not committed and not every agent loads it on its own. …
+…
 <!-- /agents-repo-setup -->
 ```
 
-`AGENTS.local.md`, your personal values, never committed:
+`AGENTS.local.md`:
 
 ```md
 <!-- agents-repo-setup -->
 - GitHub account: `your-account`
-- Azure user: `…`
 - Chat language: English
 <!-- /agents-repo-setup -->
 ```
 
-Two files, never a `CLAUDE.md`: `AGENTS.md` holds what belongs to the project, `AGENTS.local.md` what belongs to you. `AGENTS.md` always ends with the pointer above: Claude Code loads `AGENTS.local.md` through the `@` import, other agents by following the sentence.
+</details>
 
-| Rules | `AGENTS.md` | `AGENTS.local.md` (never committed) |
-|---|---|---|
-| shared | rules + pointer, committed | personal values |
-| local | pointer only | rules + personal values |
+## Change the defaults
 
-In a local repo a new `AGENTS.md` is committed only if you say so, so tools like `setup-matt-pocock-skills`, which write there, can be shared while your rules stay yours. If the repo already has a `CLAUDE.md`, Claude Code reads only that file: the setup offers to add `@AGENTS.md` to it, or to switch Claude Code to read both.
-
-In a **workspace**, a folder that holds several repos and where you launch the agents, nothing is committed: the rules go to the folder's `AGENTS.md`, your values to `AGENTS.local.md`, and git commands run inside the sub-repos.
-
-If an instruction file already has text of its own, the setup lists what repeats or contradicts the new block and asks how to merge it. Re-running the setup replaces only the text between the markers.
-
-## What you can do after
-
-- **New feature**: start `/grill-with-docs`. The agent interviews you until the design is settled, then suggests each next step; you start it:
-  1. `/grill-with-docs`: the interview; updates `GLOSSARY.md` and ADRs
-  2. `/to-spec`: the spec on the issue tracker
-  3. `/to-tickets`: tickets with blocking relations
-  4. `/implement-spec`: code with subagents and TDD; the final review runs `code-review` and `ponytail-review` on its own
-- **Small fixes and questions**: just ask. For a larger task the agent asks once whether to use the pipeline.
-- **Ponytail** is always on: the agent writes the least code that fully solves the task, with no command.
-
-## Default configuration
-
-- [mattpocock/skills](https://github.com/mattpocock/skills): `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement-spec`, with `/setup-matt-pocock-skills` at the start of a project
-- [ponytail](https://github.com/DietrichGebert/ponytail) for code
-- the subagent, git, Azure and language rules above
-
-To change the defaults, fork this repo and edit [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): each entry holds when to use it, how to install it, and the exact line written to `AGENTS.md`.
-
-## Install
-
-```sh
-npx skills add gianmadd/agents-repo-setup -g
-```
-
-Installs for every agent the [`skills`](https://github.com/vercel-labs/skills) CLI supports (Claude Code, Codex, Cursor, Copilot…).
-
-## Use
-
-Open an agent in the repo and start the `agents-setup` skill (`/agents-setup` in Claude Code, `$agents-setup` in Codex).
+Fork this repo and edit [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): each entry holds its prerequisites, its install command and the exact text it writes.
 
 ## Files
 
 - [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the setup steps
-- [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): the default configuration, the pointer and the exact text each section writes
+- [`skills/agents-setup/defaults.md`](skills/agents-setup/defaults.md): the defaults and the exact text each section writes
 - [`skills/agents-setup/agents/openai.yaml`](skills/agents-setup/agents/openai.yaml): keeps Codex from starting the setup on its own
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary
