@@ -79,15 +79,15 @@ Any installed skill or plugin the user adds gets one line under `## Workflow`: w
 
 ### Subagents
 
-- Default, per agent in use: Claude Code `sonnet`; Codex, ask for the model (show the main model from `~/.codex/config.toml` as reference). Effort `high` for implementation and review, `medium` for the rest.
+- Default, per agent in use: Claude Code `sonnet`; Codex `gpt-6-luna`. Effort `high` for implementation and review, `medium` for the rest.
 
 ```md
 ## Subagents
 
-Subagents run on a cheaper model than the main session: pass model and effort explicitly at every spawn.
+Subagents use the model and effort below: pass both explicitly at every spawn.
 
 - Claude Code: `model: sonnet`; effort `high` for implementation and review, `medium` for research and exploration.
-- Codex: model `<model>`; reasoning effort `high` for implementation and review, `medium` for research and exploration.
+- Codex: model `gpt-6-luna`; reasoning effort `high` for implementation and review, `medium` for research and exploration.
 ```
 
 ### Git
@@ -99,6 +99,12 @@ Subagents run on a cheaper model than the main session: pass model and effort ex
 ## Git
 
 - <permission level as two lines: "Allowed without asking: …" and "Ask first: …">
+```
+
+Workspace only, appended to the section:
+
+```md
+This folder is not a git repo: run git and `gh` inside the sub-repo concerned (`git -C <repo> …`). Sub-repos: <list>.
 ```
 
 GitHub remote only, appended to the section:

@@ -50,7 +50,7 @@ Write and review code the ponytail way: the plugin loads it every session.
 
 ## Subagents
 
-Subagents run on a cheaper model than the main session: pass model and effort explicitly at every spawn.
+Subagents use the model and effort below: pass both explicitly at every spawn.
 
 - Claude Code: `model: sonnet`; effort `high` for implementation and review, `medium` for research and exploration.
 
@@ -90,7 +90,9 @@ Two files, never a `CLAUDE.md`: `AGENTS.md` holds what belongs to the project, `
 
 In a local repo a new `AGENTS.md` is committed only if you say so, so tools like `setup-matt-pocock-skills`, which write there, can be shared while your rules stay yours. If the repo already has a `CLAUDE.md`, Claude Code reads only that file: the setup offers to add `@AGENTS.md` to it, or to switch Claude Code to read both.
 
-Re-running the setup replaces only the text between the markers.
+In a **workspace**, a folder that holds several repos and where you launch the agents, nothing is committed: the rules go to the folder's `AGENTS.md`, your values to `AGENTS.local.md`, and git commands run inside the sub-repos.
+
+If an instruction file already has text of its own, the setup lists what repeats or contradicts the new block and asks how to merge it. Re-running the setup replaces only the text between the markers.
 
 ## Default configuration
 
