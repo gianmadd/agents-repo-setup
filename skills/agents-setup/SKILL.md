@@ -98,7 +98,7 @@ The rules block is the header followed by the kept sections, in section 6 order.
 
 `AGENTS.md`: append the block to an existing file, else create it. A new one is committed in a shared repo, and in a local repo only if the user said so in question 2; otherwise add it to `.git/info/exclude`. In a local repo with a team `AGENTS.md`, the pointer is a committed change to the team's file: tell the user before writing.
 
-`AGENTS.local.md` goes at the repo root and into `.git/info/exclude`. In a workspace or a plain folder both files go in the folder and nothing goes into any `.git/info/exclude`. A switch-off file you create in a local repo, or in a shared repo where it is not already tracked, goes into `.git/info/exclude` as well.
+`AGENTS.local.md` goes at the repo root and into `.git/info/exclude`. In a workspace or a plain folder both files go in the folder and nothing goes into any `.git/info/exclude`. A switch-off file you create in a local repo, or in a shared repo where it is not already tracked, goes into `.git/info/exclude` as well. With the web UI check kept, so does `.playwright-cli/`, in each sub-repo of a workspace: `playwright-cli` writes page snapshots and console logs there.
 
 When a `CLAUDE.md` exists, Claude Code reads it instead of `AGENTS.md` unless it imports `AGENTS.md`. Never create a `CLAUDE.md`; if one exists without the import, offer: (a) `@AGENTS.md` as its first line, a committed change (default in a shared repo); (b) the user sets **Project instructions** to `claude-md-and-agents-md` in Claude Code's `/config`, which applies to all their repos (default in a local repo).
 
