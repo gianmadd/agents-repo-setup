@@ -12,7 +12,11 @@ npx skills add gianmadd/agents-repo-setup -g
 
 Then open an agent in the repo and run `/agents-setup` (Claude Code) or `$agents-setup` (Codex). Answer "ok" to keep every default.
 
-To update the skill later: `npx skills update agents-setup -g`.
+To update the skill later:
+
+```sh
+npx skills update agents-setup -g
+```
 
 ## What you get
 
