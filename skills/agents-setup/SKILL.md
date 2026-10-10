@@ -204,7 +204,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
     }
   }
   ```
-  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check and `Bash(adb *)` with Android. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*` and `git push * main*`.
+  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check, `Bash(maestro *)` with Android or iOS, `Bash(adb *)` with Android and `Bash(xcrun simctl *)` with iOS. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*` and `git push * main*`.
 - **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; push and destructive git still ask you.
 
 #### Skill nudge
@@ -245,21 +245,22 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 #### UI check
 
-- **Explore**: what UI the repo has. Web: a frontend framework in `package.json` (React, Vue, Svelte, Angular, Next…), or `.html`, `.razor`, `.cshtml` files outside dependencies. Android: an `AndroidManifest.xml`, or the `com.android.application` plugin in a Gradle file.
-- **Question**: always asked, whatever was found. How should the agent check UI changes before calling them done? Say what was found and where ("Android app in `app/`"). Options: (a) web, with `playwright-cli`; (b) Android, with `adb`; (c) both; (d) none.
-- **Default**: what was found: web, Android, or both; none when the repo has code but no UI; web in a new or empty repo.
-- **Prerequisites**: web, command `playwright-cli` (Node 18+), skill `playwright-cli` (`npx skills ls -g`), and a browser: Google Chrome, which `playwright-cli` uses by default, or Playwright's Chromium (`chromium-*` in Playwright's browser cache, `~/Library/Caches/ms-playwright` on macOS). Android, `adb` (Android platform-tools).
-- **Install** (every agent): web, `npm install -g @playwright/cli@latest`, then `npx skills add microsoft/playwright-cli -g -y -s playwright-cli`; without Google Chrome, `playwright-cli install-browser chromium` too, and offer `export PLAYWRIGHT_MCP_BROWSER=chromium` in the user's shell profile so it becomes the default. Android, `brew install --cask android-platform-tools` (other systems: https://developer.android.com/tools/releases/platform-tools).
-- **Writes**, the web line, the Android line, or both:
+- **Explore**: what UI the repo has. Web: a frontend framework in `package.json` (React, Vue, Svelte, Angular, Next…), or `.html`, `.razor`, `.cshtml` files outside dependencies. Android: an `AndroidManifest.xml`, or the `com.android.application` plugin in a Gradle file. iOS: an `.xcodeproj` or `.xcworkspace` with an iOS target.
+- **Question**: always asked, whatever was found. How should the agent check UI changes before calling them done? Say what was found and where ("Android app in `app/`"). Options, any combination: web, with `playwright-cli`; Android, with Maestro; iOS, with Maestro (macOS only); or none. Say what each needs installed, so the user picks only what they will use.
+- **Default**: what was found (web, Android, iOS, or several); none when the repo has code but no UI; web in a new or empty repo.
+- **Prerequisites**: web, command `playwright-cli` (Node 18+), skill `playwright-cli` (`npx skills ls -g`), and a browser: Google Chrome, which `playwright-cli` uses by default, or Playwright's Chromium (`chromium-*` in Playwright's browser cache, `~/Library/Caches/ms-playwright` on macOS). Android and iOS: command `maestro` and Java 17+ (`java -version`). Android also `adb` (Android platform-tools, usually there with Android Studio): the agent installs the app and reads crashes through it. iOS also Xcode and its Command Line Tools (`xcode-select -p`). Install only what the chosen platforms need.
+- **Install** (every agent): web, `npm install -g @playwright/cli@latest`, then `npx skills add microsoft/playwright-cli -g -y -s playwright-cli`; without Google Chrome, `playwright-cli install-browser chromium` too, and offer `export PLAYWRIGHT_MCP_BROWSER=chromium` in the user's shell profile so it becomes the default. Android and iOS: `brew tap mobile-dev-inc/tap && brew trust --formula mobile-dev-inc/tap/maestro && brew install mobile-dev-inc/tap/maestro` (other systems: `curl -fsSL "https://get.maestro.mobile.dev" | bash`); Java 17+ if missing, e.g. `brew install openjdk@17`. Android: `brew install --cask android-platform-tools` (other systems: https://developer.android.com/tools/releases/platform-tools). iOS: Xcode from the App Store, then `xcode-select --install`.
+- **Writes**, one line per chosen platform:
   ```md
   ## UI check
 
   Before calling a UI change done, check it running: passing tests don't show a blank screen or a hidden button. When done, stop the processes you started: a server left running holds its port next time.
 
   - Web: start the app (find how from the repo), open it with `playwright-cli`, walk through the changed flow and check the console for errors. If Google Chrome is missing, pass `--browser=chromium`.
-  - Android: install the app on a running emulator or device (`adb devices`; `./gradlew installDebug`, or how the repo builds), walk through the changed flow with `adb` (`shell uiautomator dump` to find elements, `shell input tap` and `shell input text`, `exec-out screencap -p` for a screenshot) and check `adb logcat` for crashes. With no device running, start an emulator if one is configured, else ask the user.
+  - Android: install the app on a running emulator or device (`./gradlew installDebug`, or how the repo builds), walk through the changed flow with Maestro (`maestro hierarchy` to find elements, a short flow YAML run with `maestro test <flow>.yaml`) and check `adb logcat` for crashes. With no device running, start an emulator if one is configured (`maestro start-device`), else ask the user.
+  - iOS: build the app for the simulator and install it on a booted one (`xcrun simctl install booted <app>`, or how the repo builds), walk through the changed flow with Maestro as above, and check the simulator log for crashes. With no simulator booted, boot one (`maestro start-device`), else ask the user.
   ```
-- **How to use**: UI changes: the agent checks them running, in the browser or on the emulator, before saying they're done.
+- **How to use**: UI changes: the agent checks them running, in the browser, on the emulator or on the simulator, before saying they're done.
 
 #### Subagents
 
