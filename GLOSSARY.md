@@ -20,6 +20,14 @@ _Avoid_: secrets, credentials, local config
 The skills, plugins and rules the Setup offers, with the default answer to each of its questions, which the user keeps, changes or extends repo by repo. It lives in `SKILL.md`, after the procedure: one entry per skill, plugin or rule, each with the same fields (what to explore, its question, default, what the question shows, prerequisites, install, switch-off, text written, finish notes, how to use).
 _Avoid_: catalog, preset, recommended configuration
 
+**Workflow**:
+The sequence of steps a new feature goes through, from the design interview to implemented and reviewed tickets; the user starts each step.
+_Avoid_: pipeline, feature workflow, process
+
+**Workflow kit**:
+The fork of agentic-dev-kit that provides the Workflow steps mattpocock/skills lacks; it holds no rules of its own on git, accounts or trackers, which come from the Repo instructions.
+_Avoid_: dev kit, agentic kit
+
 **Prerequisite**:
 A skill, plugin or tool that the Repo instructions name and that must be installed for them to work.
 _Avoid_: dependency, requirement

@@ -18,21 +18,30 @@ To update the skill later:
 npx skills update agents-setup -g
 ```
 
+The Workflow's skills live in each repo; update them there:
+
+```sh
+npx skills update -p
+```
+
 ## What you get
 
-A feature workflow built on [mattpocock/skills](https://github.com/mattpocock/skills), with [ponytail](https://github.com/DietrichGebert/ponytail) for the code:
+A Workflow for new features, built on [mattpocock/skills](https://github.com/mattpocock/skills) and on [gianmadd/agentic-dev-kit](https://github.com/gianmadd/agentic-dev-kit), a fork of [salvatorebottiglieri/agentic-dev-kit](https://github.com/salvatorebottiglieri/agentic-dev-kit) that takes its git, tracker and UI rules from your `AGENTS.md` (why a fork: [ADR 0001](docs/adr/0001-workflow-kit-is-a-fork.md)). [ponytail](https://github.com/DietrichGebert/ponytail) keeps the code lean. The Workflow's skills install in the repo, not globally:
 
 | You want to… | You do | What happens |
 |---|---|---|
 | build a feature | start `/grill-with-docs` | the agent interviews you until the design is settled, then suggests each next step; you start it |
 | | `/to-spec` | the design becomes a spec on the issue tracker |
+| | `/product-review` | an HTML mockup of the UI, per persona and edge case (only with the web UI check) |
+| | `/system-architecture` | diagrams, contracts and domain invariants on the spec; skipped for small changes |
 | | `/to-tickets` | the spec becomes tickets, with what blocks what |
-| | `/implement-spec` | subagents build the tickets with TDD; the final review runs `code-review` and `ponytail-review` on its own |
-| fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the workflow |
+| | `/program-design` | the signatures and files each ticket will touch |
+| | `/implement-loop` | subagents build each ticket with TDD; three reviewers (standards, spec, ponytail) and a mutation check that the tests really fail on wrong code; then test, lint and the UI check; push and PR as your git rules say |
+| fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the Workflow |
 | keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
 | check a UI change | nothing | before saying it's done, the agent runs the app, in the browser with [playwright-cli](https://github.com/microsoft/playwright-cli) on the Android emulator or iOS simulator with [Maestro](https://maestro.dev), or on the Mac with [Peekaboo](https://github.com/openclaw/Peekaboo), tries the flow and reads the errors |
 
-First time in a repo, run `/setup-matt-pocock-skills` too: it tells the workflow where the issues live. The setup reminds you.
+First time in a repo, run `/setup-matt-pocock-skills` too: it tells the Workflow where the issues live. The setup reminds you.
 
 ## The questions
 
@@ -42,7 +51,7 @@ One message, every question with its options and a default:
 |---|---|---|
 | 1 | which agents work in the repo | all installed |
 | 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only | yours only |
-| 3 | which skills and plugins, and any others you have installed | the workflow and ponytail |
+| 3 | which skills and plugins, and any others you have installed | the Workflow and ponytail |
 | 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked | what the repo has; web in a new repo |
 | 5 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
 | 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
@@ -69,7 +78,7 @@ Two files:
 - **Existing `CLAUDE.md`**: Claude Code reads only that file, so the setup offers to add `@AGENTS.md` to it.
 - **Existing instructions**: what they already say becomes the default answer (e.g. "commits in Italian, from your `CLAUDE.md`"), so the new rules don't contradict them; what they repeat, the setup offers to delete, so it isn't loaded twice.
 - **Workspace** (a folder holding several repos): both files go in the folder, nothing is committed, and each sub-repo can have its own GitHub account.
-- **Background permissions**: with the workflow, `.claude/settings.local.json` pre-approves the commands `implement-spec`'s background agents need, since they can't ask you: file edits, basic file reading (`ls`, `cat`, `grep`…), stopping the servers they start (`lsof`, `kill`), the repo's test, build and run commands, `playwright-cli`, `maestro`, `adb`, `xcrun simctl`, `peekaboo` or `xcodebuild` for the UI check, as chosen, and only the git commands they use (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`, `switch`, `checkout -b`, `add`, `commit`, `merge`, `worktree`). Every other git command asks, push, `reset --hard`, `clean`, `branch -D`, `rebase`, `commit --amend` and the forms of `switch`, `checkout`, `restore` and `stash` that discard changes included. With git level (a) only reading git is pre-approved; with (c), push too, except force-push and push to `main`; with (d), every git command.
+- **Background permissions**: with the Workflow, `.claude/settings.local.json` pre-approves the commands `implement-loop`'s background agents need, since they can't ask you: file edits, basic file reading (`ls`, `cat`, `grep`…), stopping the servers they start (`lsof`, `kill`), the repo's test, build and run commands, `playwright-cli`, `maestro`, `adb`, `xcrun simctl`, `peekaboo` or `xcodebuild` for the UI check, as chosen, and only the git commands they use (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`, `switch`, `checkout -b`, `add`, `commit`, `merge`, `worktree`). Every other git command asks, push, `reset --hard`, `clean`, `branch -D`, `rebase`, `commit --amend` and the forms of `switch`, `checkout`, `restore` and `stash` that discard changes included. With git level (a) only reading git is pre-approved; with (c), push too, except force-push and push to `main`; with (d), every git command.
 - **Re-run**: the setup changes only the text between its `<!-- agents-repo-setup -->` markers.
 
 <details>
@@ -83,19 +92,21 @@ Standing rules for every agent working here. Personal values are in `AGENTS.loca
 
 ## Workflow
 
-New features go through the mattpocock/skills pipeline, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself.
+New features go through the Workflow, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself, and say which optional step you would skip and why. …
 
-1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs.
+1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs. Before the spec, have a subagent try to disprove what the conversation assumed about the current code: …
 2. `to-spec`: turn the settled design into a spec on the issue tracker.
-3. `to-tickets`: split the spec into tickets with blocking relations.
-4. `implement-spec`: implement the tickets with subagents, TDD and a final code review.
+3. `product-review`, when the feature touches UI: …
+4. `system-architecture`, unless it is a bug fix or a trivial feature: …
+5. `to-tickets`: split the spec into tickets with blocking relations.
+6. `program-design`, unless no signature changes: …
+7. `implement-loop`: implement the tickets with subagents and TDD, review each on three axes, prove the tests with mutations, then the test, lint and UI gates.
 
 ## Code
 
 Write and review code the ponytail way: the plugin loads it every session; where ponytail is installed as a skill instead, load the `ponytail` skill before writing code.
 
-- Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; …
-- Reviews outside the pipeline: `ponytail-review`.
+- Reviews outside the Workflow: `ponytail-review`.
 
 ## UI check
 

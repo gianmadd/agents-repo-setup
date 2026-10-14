@@ -161,40 +161,54 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 - **Question**: Skills and plugins, two parts. (a) Which of the default skills and plugins should this repo use? Show, under "What the defaults give", the **Shown in the question** text of every entry below; then list the entries, each marked installed or missing per agent. Options: all (default); drop some: tell me which; none. An entry that works only with another ("only together with") goes when that one goes. (b) Do you want to add others? First list the installed skills and plugins outside the defaults grouped by source, one line per group, names only: one group per skill package in `npx skills ls -g` (e.g. mattpocock/skills), one per agent's plugins, one for the repo's own skills. Leave out this setup itself, the skills the default entries need as prerequisites, disabled plugins, plugins synced from claude.ai, and plugins an agent bundles on its own (Codex's `openai-*`). The user can ask what any name does. For each one added, ask when it is used and whether the user starts it. Default: none.
 
-#### Feature workflow (mattpocock/skills)
+#### Workflow (mattpocock/skills and gianmadd/agentic-dev-kit)
 
+- **Explore**: which of the Prerequisites are installed globally (`npx skills ls -g`) and which in the repo (`npx skills ls`).
 - **Default**: on.
 - **Shown in the question**:
   ```md
-  New features, one step at a time; you start each step, the agent suggests the next:
+  New features, one step at a time; you start each step, the agent suggests the next and says which optional step it would skip:
   1. `grill-with-docs`: interviews you until the design is settled
   2. `to-spec`: writes the spec on the issue tracker
-  3. `to-tickets`: splits it into tickets
-  4. `implement-spec`: builds the tickets with TDD and reviews them on its own
+  3. `product-review`: an HTML mockup of the UI (only with the web UI check)
+  4. `system-architecture`: diagrams, contracts and domain invariants (skipped for small changes)
+  5. `to-tickets`: splits the spec into tickets
+  6. `program-design`: the signatures and files each ticket will touch
+  7. `implement-loop`: builds the tickets with TDD, reviews each on three axes, proves the tests with mutations, checks test, lint and UI; asks before push and PR as your git rules say
+  The skills install in this repo, not globally.
   ```
-- **Prerequisites**: skills `setup-matt-pocock-skills`, `grill-with-docs`, `grilling`, `domain-modeling`, `to-spec`, `to-tickets`, `implement-spec`, `tdd`, `code-review`.
-- **Install** (every agent): `npx skills add mattpocock/skills -g -y -s <missing skills, space-separated>`.
-- **Writes**:
+- **Prerequisites**: from mattpocock/skills, `setup-matt-pocock-skills`, `grill-with-docs`, `grilling`, `domain-modeling`, `to-spec`, `to-tickets`, `tdd`, `code-review`; from gianmadd/agentic-dev-kit, `system-architecture`, `program-design`, `implement-loop`, and `product-review` with the web UI check.
+- **Install**, into the repo (into the folder in a workspace), never with `-g`; `<agents>` are the agents in use (`claude-code`, `codex`, …):
+  - mattpocock/skills: `npx skills add mattpocock/skills -y -a <agents> -s <skills>`. In a shared repo, every one of them, so the team gets them; in a local repo, only those not installed globally: a global skill wins over the repo's copy in Claude Code, and Codex would list both.
+  - `npx skills add gianmadd/agentic-dev-kit -y -a <agents> -s <skills>`, always.
+
+  They land in `.agents/skills/`, with links in `.claude/skills/`, and `npx skills` records them in `skills-lock.json`.
+- **Writes** (step 3 only with the web UI check, the steps renumbered without it; the last paragraph only when Ponytail is dropped):
   ```md
   ## Workflow
 
-  New features go through the mattpocock/skills pipeline, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself. The four steps and `setup-matt-pocock-skills` are commands only the user can run, so they are missing from your skill list even when installed: suggest them by command (`/grill-with-docs` in Claude Code, `$grill-with-docs` in Codex), never as missing.
+  New features go through the Workflow, one step at a time. The user starts each step: when one finishes, suggest the next instead of running it yourself, and say which optional step you would skip and why. The steps and `setup-matt-pocock-skills` are commands only the user can run, so they are missing from your skill list even when installed: suggest them by command (`/grill-with-docs` in Claude Code, `$grill-with-docs` in Codex), never as missing.
 
-  1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs.
+  1. `grill-with-docs`: interview the user until the design is settled; updates `GLOSSARY.md` and ADRs. Before the spec, have a subagent try to disprove what the conversation assumed about the current code: a premise that falls changes the design.
   2. `to-spec`: turn the settled design into a spec on the issue tracker.
-  3. `to-tickets`: split the spec into tickets with blocking relations.
-  4. `implement-spec`: implement the tickets with subagents, TDD and a final code review.
+  3. `product-review`, when the feature touches UI: an HTML mockup with success criteria per persona and edge case.
+  4. `system-architecture`, unless it is a bug fix or a trivial feature: diagrams, contracts and domain invariants, appended to the spec.
+  5. `to-tickets`: split the spec into tickets with blocking relations.
+  6. `program-design`, unless no signature changes (config, data, mechanical rename): call tree, file changes and signatures, appended to each ticket.
+  7. `implement-loop`: implement the tickets with subagents and TDD, review each on three axes, prove the tests with mutations, then the test, lint and UI gates.
 
   If `docs/agents/` is missing, the issue tracker is not configured yet: suggest `setup-matt-pocock-skills` first.
+
+  Ponytail is not installed here: `implement-loop` runs without its ponytail axis.
   ```
-- **Finish**: if `docs/agents/` is missing, run `setup-matt-pocock-skills` now. It writes its section to `AGENTS.md` (to `CLAUDE.md` if one exists), so that section is tracked exactly when that file is. Its new files (`docs/agents/`, `GLOSSARY.md`, `docs/adr/`) start untracked: commit them or add them to `.git/info/exclude`.
-- **How to use**: New feature: start `grill-with-docs`; when each step ends, the agent suggests the next. `implement-spec` ends with the review on its own.
+- **Finish**: if `docs/agents/` is missing, run `setup-matt-pocock-skills` now. It writes its section to `AGENTS.md` (to `CLAUDE.md` if one exists), so that section is tracked exactly when that file is. Its new files (`docs/agents/`, `GLOSSARY.md`, `docs/adr/`) start untracked: commit them or add them to `.git/info/exclude`. The same for `.scratch/`, where a local tracker keeps its issues and `product-review` its mockups. The installed skills (`.agents/skills/`, `.claude/skills/`, `skills-lock.json`): in a shared repo, commit them; in a local repo, add them to `.git/info/exclude`. Add `.claude/worktrees/` to `.git/info/exclude` in both: `implement-loop` works there. In a local repo with global mattpocock skills, say that once no other repo uses those, they can go, and that repos set up before still need them until their setup is re-run.
+- **How to use**: New feature: start `grill-with-docs`; when each step ends, the agent suggests the next. `implement-loop` asks before push and PR as the git rules say. Update the skills with `npx skills update -p`.
 
 #### Background permissions
 
 - **Explore**: `.claude/settings.local.json`, if it exists, and whether it is tracked; the repo's test, build and run commands (`package.json` scripts, `Makefile`, `*.csproj`, Gradle).
-- **Default**: on, only together with the feature workflow, and only for Claude Code.
-- **Shown in the question**: `implement-spec` runs its subagents in the background, where Claude Code cannot ask you for permission: a command not pre-approved is refused and the ticket stalls. This pre-approves what they need, and always asks for push and destructive git.
+- **Default**: on, only together with the Workflow, and only for Claude Code.
+- **Shown in the question**: `implement-loop` runs its subagents in the background, where Claude Code cannot ask you for permission: a command not pre-approved is refused and the ticket stalls. This pre-approves what they need, and always asks for push and destructive git.
 - **Writes**, to `.claude/settings.local.json`, not to the rules block: merge into `permissions`, keeping what is there.
   ```json
   {
@@ -204,41 +218,40 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
     }
   }
   ```
-  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check, `Bash(maestro *)` with Android or iOS, `Bash(adb *)` with Android, `Bash(xcrun simctl *)` with iOS, and `Bash(peekaboo *)`, `Bash(xcodebuild *)` with macOS. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-spec`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*`, `git push -f*` and `git push * main*` among the pushes: that catches only an explicit push to main, not a plain `git push` from main, which is left to the rule in `AGENTS.md`; with level (d), replace the git commands with `Bash(git *)` and drop `ask`. With the `GH_TOKEN=` prefix of the GitHub account rule, push, pull and fetch still ask at (c) and (d): an `allow` rule does not match past that prefix, an `ask` rule does.
-- **How to use**: `implement-spec`'s background agents run without stopping on permission prompts; the git commands not pre-approved still ask you.
+  The run commands come from the repo (e.g. `Bash(npm *)`, `Bash(node *)`, `Bash(dotnet *)`, `Bash(./gradlew *)`): for `package.json` scripts, both the package manager that runs them (`npm`, `pnpm`, `yarn`) and the tools they call, since agents run `npm test`, not `node --test`; add `Bash(playwright-cli *)` with the web UI check, `Bash(maestro *)` with Android or iOS, `Bash(adb *)` with Android, `Bash(xcrun simctl *)` with iOS, and `Bash(peekaboo *)`, `Bash(xcodebuild *)` with macOS. `ask` wins over `allow`, and any git command not listed asks too. The git list is what the subagents need: reading, branches, commits, merges into their own branches, worktrees. With git level (a), keep only the reading commands (`status`, `diff`, `log`, `show`, `rev-parse`, `branch`), and warn in the question that `implement-loop`'s subagents then cannot commit, so its tickets stall; with level (c), also allow `Bash(git push*)` and ask only for `git push --force*`, `git push -f*` and `git push * main*` among the pushes: that catches only an explicit push to main, not a plain `git push` from main, which is left to the rule in `AGENTS.md`; with level (d), replace the git commands with `Bash(git *)` and drop `ask`. With the `GH_TOKEN=` prefix of the GitHub account rule, push, pull and fetch still ask at (c) and (d): an `allow` rule does not match past that prefix, an `ask` rule does.
+- **How to use**: `implement-loop`'s background agents run without stopping on permission prompts; the git commands not pre-approved still ask you.
 
 #### Skill nudge
 
-- **Default**: on, only together with the feature workflow.
-- **Shown in the question**: For a larger task outside the pipeline, the agent asks once whether to use it.
+- **Default**: on, only together with the Workflow.
+- **Shown in the question**: For a larger task outside the Workflow, the agent asks once whether to use it.
 - **Writes**, at the end of the Workflow section:
   ```md
-  When the user asks for a non-trivial task (new feature, multi-file change, refactor) outside the pipeline, ask once whether to go through it instead. Small fixes and questions go straight ahead.
+  When the user asks for a non-trivial task (new feature, multi-file change, refactor) outside the Workflow, ask once whether to go through it instead. Small fixes and questions go straight ahead.
   ```
-- **How to use**: Small fixes and questions: just ask; for a larger task the agent asks once whether to use the pipeline.
+- **How to use**: Small fixes and questions: just ask; for a larger task the agent asks once whether to use the Workflow.
 
 #### Ponytail (DietrichGebert/ponytail)
 
 - **Default**: on.
-- **Shown in the question**: Ponytail is always on: the agent writes the least code that fully solves the task. With the feature workflow, `implement-spec`'s final review also runs `ponytail-review`.
+- **Shown in the question**: Ponytail is always on: the agent writes the least code that fully solves the task. With the Workflow, `implement-loop` also reviews each ticket on a ponytail axis.
 - **Prerequisites**: Claude Code plugin `ponytail@ponytail` (`claude plugin list`); Codex plugin `ponytail@ponytail` (`[plugins."ponytail@ponytail"]` in `~/.codex/config.toml`); other agents, skill `ponytail` (`npx skills ls -g`).
 - **Install**: Claude Code `claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`; Codex `codex plugin marketplace add DietrichGebert/ponytail && codex plugin add ponytail@ponytail`; other agents `npx skills add DietrichGebert/ponytail -g -y`.
 - **Switch off**: Claude Code, `"enabledPlugins": {"ponytail@ponytail": false}` in `.claude/settings.local.json`; Codex, `[plugins."ponytail@ponytail"]` with `enabled = false` in `.codex/config.toml` (read only once the project is trusted in Codex).
-- **Writes** (the `implement-spec` line only when the feature workflow is kept too):
+- **Writes**:
   ```md
   ## Code
 
   Write and review code the ponytail way: the plugin loads it every session; where ponytail is installed as a skill instead, load the `ponytail` skill before writing code.
 
-  - Final review of `implement-spec`: run `code-review` and `ponytail-review` on the integration branch in parallel, as separate axes; keep their reports separate, then fix every finding of `code-review` and the "Must fix" and "Should fix" of `ponytail-review` in one implementer subagent. List the "Nice to have" for the user.
-  - Reviews outside the pipeline: `ponytail-review`.
+  - Reviews outside the Workflow: `ponytail-review`.
   ```
-  Without the feature workflow, the last line reads "Reviews: `ponytail-review`."
+  Without the Workflow, the last line reads "Reviews: `ponytail-review`."
 - **How to use**: Ponytail is always on: no command needed.
 
 #### Added by the user
 
-- **Writes**: one line per skill or plugin: when to use it, by name; "suggest `<name>`" if the user starts it, else "use `<name>`". It goes at the end of the Workflow section, or in a `## Skills` section of its own when the feature workflow is dropped.
+- **Writes**: one line per skill or plugin: when to use it, by name; "suggest `<name>`" if the user starts it, else "use `<name>`". It goes at the end of the Workflow section, or in a `## Skills` section of its own when the Workflow is dropped.
 - **How to use**: one line per skill: when to use it.
 
 ### Rules
@@ -377,7 +390,7 @@ Always written, no question: a leaked key is the one mistake that cannot be take
   - Reading is free; creating or editing work items needs the user's explicit confirmation.
   ```
   In the Git section, say "work items" instead of "issues".
-- **Finish**: with the feature workflow kept, pick "Other" as issue tracker in `setup-matt-pocock-skills` and describe Azure DevOps.
+- **Finish**: with the Workflow kept, pick "Other" as issue tracker in `setup-matt-pocock-skills` and describe Azure DevOps.
 
 #### Language
 
