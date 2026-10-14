@@ -47,17 +47,17 @@ First time in a repo, run `/setup-matt-pocock-skills` too: it tells the Workflow
 
 One message, every question with its options and a default:
 
-| # | Decides | Default |
-|---|---|---|
-| 1 | which agents work in the repo | all installed |
-| 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only | yours only |
-| 3 | which skills and plugins, and any others you have installed | the Workflow and ponytail |
-| 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked | what the repo has; web in a new repo |
-| 5 | subagent model and effort | Claude Code `sonnet`, Codex `gpt-6-luna` |
-| 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation | the one matching your git email |
-| 7 | what the agent may do with git without asking; how it names branches and writes commits and PRs | branches and local commits; `feat/420-login-page`, short explanatory messages |
-| 8 | Azure resources and Azure DevOps | no |
-| 9 | language for chat, and for code and commits | English |
+| # | Decides |
+|---|---|
+| 1 | which agents work in the repo |
+| 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only |
+| 3 | which skills and plugins, and any others you have installed |
+| 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked |
+| 5 | subagent model and effort |
+| 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
+| 7 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
+| 8 | Azure resources and Azure DevOps |
+| 9 | language for chat, and for code and commits |
 
 Before writing, it lists what goes in each file and waits for your ok. Anything missing is installed only after your ok.
 
