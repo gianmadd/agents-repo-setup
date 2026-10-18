@@ -53,7 +53,7 @@ One message, every question with its options and a default:
 | 2 | if the folder isn't a git repo yet, whether to `git init`; then rules shared with the team (committed) or yours only |
 | 3 | which skills and plugins, and any others you have installed |
 | 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked |
-| 5 | subagent model and effort |
+| 5 | coordinator model; subagent model and effort |
 | 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
 | 7 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
 | 8 | Azure resources and Azure DevOps |
@@ -118,7 +118,7 @@ Before calling a UI change done, check it running: passing tests don't show a bl
 
 Subagents use the model and effort below: pass both explicitly at every spawn.
 
-- Claude Code: `model: sonnet`; effort `high` for implementation and review, `medium` for research and exploration.
+- Claude Code: `model: sonnet`; effort `medium`.
 
 ## Git
 

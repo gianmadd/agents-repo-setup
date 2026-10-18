@@ -278,17 +278,18 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 #### Subagents
 
-- **Question**: Which model and effort should subagents use, per agent? Options: the default; other: tell me.
-- **Default**, per agent in use: Claude Code `sonnet`; Codex `gpt-6-luna`. Effort `high` for implementation and review, `medium` for the rest.
+- **Question**: Which model should the coordinator (the main session that spawns subagents) use, and which model and effort should subagents use, per agent? Options: the default; other: tell me.
+- **Default**, per agent in use: coordinator Claude Code `opus`; subagents Claude Code `sonnet`, Codex `gpt-6-luna`, effort `medium`.
 - **Writes**, one line per agent in use:
   ```md
   ## Subagents
 
   Subagents use the model and effort below: pass both explicitly at every spawn.
 
-  - Claude Code: `model: sonnet`; effort `high` for implementation and review, `medium` for research and exploration.
-  - Codex: model `gpt-6-luna`; reasoning effort `high` for implementation and review, `medium` for research and exploration.
+  - Claude Code: `model: sonnet`; effort `medium`.
+  - Codex: model `gpt-6-luna`; reasoning effort `medium`.
   ```
+  With Claude Code, also merge `"model": "opus"` into `.claude/settings.local.json`, keeping what is there: a rule cannot change the session's own model.
 
 #### GitHub account
 
