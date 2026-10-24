@@ -54,7 +54,7 @@ One message, every question with its options and a default:
 | 3 | which skills and plugins, and any others you have installed |
 | 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked |
 | 5 | coordinator model; subagent model and effort |
-| 6 | only with both Claude Code and Codex: install the `--workers` launcher |
+| 6 | only with both Claude Code and Codex: install the `fns` launcher |
 | 7 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
 | 8 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
 | 9 | Azure resources and Azure DevOps |
@@ -64,7 +64,7 @@ Before writing, it lists what goes in each file and waits for your ok. Anything 
 
 ## Workers across subscriptions
 
-With the launcher installed, `claude --workers` or `codex --workers` (aliases like `claude-work` too) opens a local page before the session starts. It shows each subscription's remaining quota, read without spending tokens, and the worker table: for each role the skills spawn (`implementer`, `reviewer`, `prover`, `explorer`, or one you add), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model (Sonnet, Opus, Haiku; Luna, Sol, Terra) and effort. `implementer` is always native: the orchestrator works with it, and roles not listed fall back to it. Confirm, and the session starts with that table; it starts from the last one you confirmed in that repo. Without the flag, every worker is native, as before. Why it works this way: [ADR 0002](docs/adr/0002-workers-chosen-per-session.md).
+With the launcher installed, `fns` opens a small window (built on first use with `swiftc` on macOS, else a browser page) and then starts a session in the current folder. There you pick which CLI and account to start (`claude`, `claude-work`, `codex`…) with its model and effort, see each subscription's remaining quota, read without spending tokens, and set the worker table: for each role the skills spawn (`implementer`, `reviewer`, `prover`, `explorer`, or one you add), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model (Sonnet, Opus, Haiku; Luna, Sol, Terra) and effort. `implementer` is always native: the orchestrator works with it, and roles not listed fall back to it. Or click one of the folder's recent sessions, from every account, to resume it, keeping its workers or updating them. Press Start, and the session starts with that table; the page proposes the last choice you made in that repo. Started the usual way, every worker is native, as before. Why it works this way: [ADR 0002](docs/adr/0002-workers-chosen-per-session.md).
 
 External workers run with permissions bypassed and return only a report, in `.scratch/workers/`: meant for the roles that only read or write in a throwaway copy (reviewer, prover, explorer).
 
@@ -177,5 +177,5 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 ## Files
 
 - [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the whole setup: the procedure, then one entry per skill or rule with its question, default and the exact text it writes
-- [`skills/agents-setup/workers/`](skills/agents-setup/workers/): the `--workers` launcher: shell functions, the local page and its server
+- [`skills/agents-setup/workers/`](skills/agents-setup/workers/): the `fns` launcher: the shell function, the page, its server and the native window around it
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary

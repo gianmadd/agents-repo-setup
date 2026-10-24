@@ -48,5 +48,5 @@ A worker run as a one-shot headless process on the other provider: prompt in, re
 _Avoid_: delegate, headless agent
 
 **Launcher**:
-The shell functions that make `claude --workers` and `codex --workers` open the quota page and start the session with the confirmed Worker table.
+The `fns` command: a local page to pick which CLI and account to start, with the quotas and the Worker table, then it starts that session in the current folder.
 _Avoid_: wrapper, router

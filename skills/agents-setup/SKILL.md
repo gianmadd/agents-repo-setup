@@ -294,16 +294,16 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 #### Workers launcher
 
 - **Explore**: whether a shell rc file (`~/.zshrc`, `~/.bashrc`) already sources `workers/workers.sh` from this skill's folder; `which python3`.
-- **Question**: only when Claude Code and Codex are both in use and the launcher is not installed. Install the `--workers` launcher? It is for this user, not this repo: it goes in their shell rc file and works in every repo. Options: yes; no.
+- **Question**: only when Claude Code and Codex are both in use and the launcher is not installed. Install the `fns` launcher? It is for this user, not this repo: it goes in their shell rc file and works in every repo. Options: yes; no.
 - **Default**: no.
 - **Shown in the question**:
   ```md
-  `claude --workers` or `codex --workers` (aliases like `claude-work` too) first opens a local page with each subscription's remaining quota, where you pick, per worker role (implementer, reviewer, prover, explorer), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model and effort; `implementer` is always native. The table is injected into that session only; without the flag, nothing changes. External workers run with permissions bypassed, so they are meant for roles that only return a report.
+  `fns` opens a local page with each subscription's remaining quota, where you pick which CLI and account to start (`claude`, `claude-work`, `codex`…) and, per worker role (implementer, reviewer, prover, explorer), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model and effort; `implementer` is always native. The table is injected into that session only; starting the CLIs the usual way changes nothing. External workers run with permissions bypassed, so they are meant for roles that only return a report.
   ```
 - **Prerequisites**: `python3`, `claude`, `codex`.
 - **Install**: append `source <this skill's folder>/workers/workers.sh` to the rc file of the user's shell (`$SHELL`), with the folder's absolute path.
-- **Finish**: open a new terminal, or `source` the rc file, before the first `--workers`.
-- **How to use**: `claude --workers` / `codex --workers`: pick who runs each worker role for this session, based on the quotas the page shows.
+- **Finish**: open a new terminal, or `source` the rc file, before the first `fns`.
+- **How to use**: `fns`: pick which CLI to start and who runs each worker role, based on the quotas the page shows.
 
 #### GitHub account
 
