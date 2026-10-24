@@ -2,7 +2,7 @@
 
 Stop re-explaining your workflow to coding agents at the start of every session.
 
-`agents-setup` is a skill you run once per repo. It asks nine questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git and how it names branches and writes commits, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
+`agents-setup` is a skill you run once per repo. It asks up to ten questions, each with a default, and writes about 40 lines of rules that Claude Code, Codex and the other agents read in every session: which skills to use and when, which GitHub account, what the agent may do with git and how it names branches and writes commits, the Azure context, subagent models, language. Everything is per repo, because accounts, Azure tenants and skills differ from repo to repo.
 
 ## Quick start
 
@@ -54,12 +54,19 @@ One message, every question with its options and a default:
 | 3 | which skills and plugins, and any others you have installed |
 | 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked |
 | 5 | coordinator model; subagent model and effort |
-| 6 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
-| 7 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
-| 8 | Azure resources and Azure DevOps |
-| 9 | language for chat, and for code and commits |
+| 6 | only with both Claude Code and Codex: install the `--workers` launcher |
+| 7 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
+| 8 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
+| 9 | Azure resources and Azure DevOps |
+| 10 | language for chat, and for code and commits |
 
 Before writing, it lists what goes in each file and waits for your ok. Anything missing is installed only after your ok.
+
+## Workers across subscriptions
+
+With the launcher installed, `claude --workers` or `codex --workers` (aliases like `claude-work` too) opens a local page before the session starts. It shows each subscription's remaining quota, read without spending tokens, and the worker table: for each role the skills spawn (`implementer`, `reviewer`, `prover`, `explorer`, or one you add), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model (Sonnet, Opus, Haiku; Luna, Sol, Terra) and effort. `implementer` is always native: the orchestrator works with it, and roles not listed fall back to it. Confirm, and the session starts with that table; it starts from the last one you confirmed in that repo. Without the flag, every worker is native, as before. Why it works this way: [ADR 0002](docs/adr/0002-workers-chosen-per-session.md).
+
+External workers run with permissions bypassed and return only a report, in `.scratch/workers/`: meant for the roles that only read or write in a throwaway copy (reviewer, prover, explorer).
 
 ## Where the rules go
 
@@ -170,4 +177,5 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 ## Files
 
 - [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the whole setup: the procedure, then one entry per skill or rule with its question, default and the exact text it writes
+- [`skills/agents-setup/workers/`](skills/agents-setup/workers/): the `--workers` launcher: shell functions, the local page and its server
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary
