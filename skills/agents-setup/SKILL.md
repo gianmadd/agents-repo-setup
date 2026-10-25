@@ -293,7 +293,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 
 #### Workers launcher
 
-- **Explore**: whether a shell rc file (`~/.zshrc`, `~/.bashrc`) already sources `workers.sh` from an agents-runner clone; `which python3`.
+- **Explore**: whether a shell rc file (`~/.zshrc`, `~/.bashrc`) already sources `fns.sh` from an agents-runner clone; `which python3`.
 - **Question**: only when the launcher is not installed. Install the `fns` launcher? It is for this user, not this repo: it goes in their shell rc file and works in every repo. Options: yes; no.
 - **Default**: no.
 - **Shown in the question**:
@@ -301,7 +301,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   `fns` opens a local page with each subscription's remaining quota, where you pick which CLI and account to start (`claude`, `claude-work`, `codex`…) and, per worker role (implementer, reviewer, prover, explorer), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model and effort; `implementer` is always native. The table is injected into that session only; starting the CLIs the usual way changes nothing. External workers run with permissions bypassed, so they are meant for roles that only return a report.
   ```
 - **Prerequisites**: `python3`, `git`, and `claude` or `codex`.
-- **Install**: `git clone https://github.com/gianmadd/agents-runner ~/.agents-runner`, then append `source ~/.agents-runner/workers.sh` to the rc file of the user's shell (`$SHELL`).
+- **Install**: `git clone https://github.com/gianmadd/agents-runner ~/.agents-runner`, then append `source ~/.agents-runner/fns.sh` to the rc file of the user's shell (`$SHELL`).
 - **Finish**: open a new terminal, or `source` the rc file, before the first `fns`.
 - **How to use**: `fns`: pick which CLI to start and who runs each worker role, based on the quotas the page shows.
 
