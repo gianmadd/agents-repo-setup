@@ -64,9 +64,7 @@ Before writing, it lists what goes in each file and waits for your ok. Anything 
 
 ## Workers across subscriptions
 
-With the launcher installed, `fns` opens a small window (built on first use with `swiftc` on macOS, else a browser page) and then starts a session in the current folder. There you pick which CLI and account to start (`claude`, `claude-work`, `codex`…) with its model and effort, see each subscription's remaining quota, read without spending tokens, and set the worker table: for each role the skills spawn (`implementer`, `reviewer`, `prover`, `explorer`, or one you add), whether the session's own subagents run it (native) or a one-shot headless run on the other CLI (external), with its model (Sonnet, Opus, Haiku; Luna, Sol, Terra) and effort. `implementer` is always native: the orchestrator works with it, and roles not listed fall back to it. Or click one of the folder's recent sessions, from every account, to resume it, keeping its workers or updating them. Press Start, and the session starts with that table. The page opens on `claude`, with the last model and effort you picked for it in that repo. To skip the page, type an account name as soon as it opens (`work` for `claude-work`) and press Enter: a new session starts there with its saved table. Started the usual way, every worker is native, as before. Why it works this way: [ADR 0002](docs/adr/0002-workers-chosen-per-session.md).
-
-External workers run with permissions bypassed and return only a report, in `.scratch/workers/`: meant for the roles that only read or write in a throwaway copy (reviewer, prover, explorer).
+With both Claude Code and Codex, the setup offers to install `fns` from [gianmadd/agents-runner](https://github.com/gianmadd/agents-runner): before each session, it picks which account runs it and which account runs each worker the skills spawn.
 
 ## Where the rules go
 
@@ -177,5 +175,4 @@ Before your first reply or action, read `AGENTS.local.md` next to this file, if 
 ## Files
 
 - [`skills/agents-setup/SKILL.md`](skills/agents-setup/SKILL.md): the whole setup: the procedure, then one entry per skill or rule with its question, default and the exact text it writes
-- [`skills/agents-setup/workers/`](skills/agents-setup/workers/): the `fns` launcher: the shell function, the page, its server and the native window around it
 - [`GLOSSARY.md`](GLOSSARY.md): project vocabulary
