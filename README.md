@@ -54,7 +54,7 @@ One message, every question with its options and a default:
 | 3 | which skills and plugins, and any others you have installed |
 | 4 | how the agent checks UI changes running: web with `playwright-cli`, Android or iOS with Maestro, native macOS apps with Peekaboo, any combination or none; only what you pick gets installed; always asked |
 | 5 | coordinator model; subagent model and effort |
-| 6 | only with both Claude Code and Codex: install the `fns` launcher |
+| 6 | install the `fns` launcher, unless it is already installed |
 | 7 | GitHub account, or "not on GitHub"; with one account, just a confirmation |
 | 8 | what the agent may do with git without asking; how it names branches and writes commits and PRs |
 | 9 | Azure resources and Azure DevOps |
@@ -64,7 +64,7 @@ Before writing, it lists what goes in each file and waits for your ok. Anything 
 
 ## Workers across subscriptions
 
-With both Claude Code and Codex, the setup offers to install `fns` from [gianmadd/agents-runner](https://github.com/gianmadd/agents-runner): before each session, it picks which account runs it and which account runs each worker the skills spawn.
+The setup offers to install `fns` from [gianmadd/agents-runner](https://github.com/gianmadd/agents-runner): before each session, it picks which account runs it and which account runs each worker the skills spawn.
 
 ## Where the rules go
 
