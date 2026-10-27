@@ -25,7 +25,7 @@ The sequence of steps a new feature goes through, from the design interview to i
 _Avoid_: pipeline, feature workflow, process
 
 **Workflow kit**:
-The fork of agentic-dev-kit that provides the Workflow steps mattpocock/skills lacks; it holds no rules of its own on git, accounts or trackers, which come from the Repo instructions.
+`gianmadd/agents-flow`, the planning steps mattpocock/skills lacks, copied from agentic-dev-kit; it holds no rules of its own on git, accounts or trackers, which come from the Repo instructions.
 _Avoid_: dev kit, agentic kit
 
 **Prerequisite**:
