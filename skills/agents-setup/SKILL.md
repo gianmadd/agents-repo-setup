@@ -278,7 +278,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
 #### Subagents
 
 - **Question**: Which model and effort should subagents use, per agent? Options: the default; other: tell me.
-- **Default**, per agent in use: Claude Code `sonnet`, Codex `gpt-6.1-terra`, effort `medium`.
+- **Default**, per agent in use: Claude Code `sonnet`, Codex `gpt-6-luna`, effort `medium`.
 - **Writes**, one line per agent in use:
   ```md
   ## Subagents
@@ -286,7 +286,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   Subagents use the model and effort below: pass both explicitly at every spawn.
 
   - Claude Code: `model: sonnet`; effort `medium`.
-  - Codex: model `gpt-6.1-terra`; reasoning effort `medium`.
+  - Codex: model `gpt-6-luna`; reasoning effort `medium`.
   ```
 
 #### Workers launcher
