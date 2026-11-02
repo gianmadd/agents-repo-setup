@@ -36,7 +36,7 @@ A Workflow for new features, built on [mattpocock/skills](https://github.com/mat
 | | `/system-architecture` | diagrams, contracts and domain invariants on the spec; skipped for small changes |
 | | `/to-tickets` | the spec becomes tickets, with what blocks what |
 | | `/program-design` | the signatures and files each ticket will touch |
-| | `/implement-spec` | subagents build the tickets in parallel with TDD, each in its own worktree; then a final review on two axes (`code-review`, `ponytail-review`); push and PR as your git rules say |
+| | `/implement-spec` | subagents build the tickets in parallel with TDD, each in its own worktree, with the spec's and each ticket's progress in % at each update; then a final review on two axes (`code-review`, `ponytail-review`); push and PR as your git rules say |
 | fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the Workflow |
 | keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
 | check a UI change | nothing | before saying it's done, the agent runs the app, in the browser with [playwright-cli](https://github.com/microsoft/playwright-cli) on the Android emulator or iOS simulator with [Maestro](https://maestro.dev), or on the Mac with [Peekaboo](https://github.com/openclaw/Peekaboo), tries the flow and reads the errors |
@@ -105,7 +105,7 @@ New features go through the Workflow, one step at a time. The user starts each s
 4. `system-architecture`, unless it is a bug fix or a trivial feature: …
 5. `to-tickets`: split the spec into tickets with blocking relations.
 6. `program-design`, unless no signature changes: …
-7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review.
+7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. With every progress update, give the spec's progress as closed tickets over the total and, for each ticket in progress, its acceptance criteria met over the total.
 
 ## Code
 

@@ -174,7 +174,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   4. `system-architecture`: diagrams, contracts and domain invariants (skipped for small changes)
   5. `to-tickets`: splits the spec into tickets
   6. `program-design`: the signatures and files each ticket will touch
-  7. `implement-spec`: builds the tickets in parallel with subagents and TDD, then a final code review; asks before push and PR as your git rules say
+  7. `implement-spec`: builds the tickets in parallel with subagents and TDD, then a final code review; with each update, the spec's progress and each ticket's in progress; asks before push and PR as your git rules say
   The skills install in this repo, not globally.
   ```
 - **Prerequisites**: from mattpocock/skills, `setup-matt-pocock-skills`, `grill-with-docs`, `grilling`, `domain-modeling`, `to-spec`, `to-tickets`, `implement-spec`, `tdd`, `code-review`; from gianmadd/agents-flow, `system-architecture`, `program-design`, and `product-review` with the web UI check.
@@ -195,7 +195,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   4. `system-architecture`, unless it is a bug fix or a trivial feature: diagrams, contracts and domain invariants, appended to the spec.
   5. `to-tickets`: split the spec into tickets with blocking relations.
   6. `program-design`, unless no signature changes (config, data, mechanical rename): call tree, file changes and signatures, appended to each ticket.
-  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review.
+  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. With every progress update, give the spec's progress as closed tickets over the total (e.g. `Spec: 40% (2/5 tickets)`) and, for each ticket in progress, its acceptance criteria met over the total (e.g. `#12: 60% (3/5 criteria)`).
 
   If `docs/agents/` is missing, the issue tracker is not configured yet: suggest `setup-matt-pocock-skills` first.
   ```
