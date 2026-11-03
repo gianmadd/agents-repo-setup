@@ -195,13 +195,7 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   4. `system-architecture`, unless it is a bug fix or a trivial feature: diagrams, contracts and domain invariants, appended to the spec.
   5. `to-tickets`: split the spec into tickets with blocking relations. Give each ticket a size by eye, from the files it touches and its acceptance criteria: S=1, M=2, L=3, XL=5; write it in the ticket (`Size: M (2)`).
   6. `program-design`, unless no signature changes (config, data, mechanical rename): call tree, file changes and signatures, appended to each ticket.
-  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. Whenever a ticket changes status (starts, is blocked or unblocked, goes to review, closes), and only then, show a table with one row per ticket: Ticket, Status, Progress, % of spec. Progress is acceptance criteria met over the total, as a bar of 2 blocks per size point (`█` done, `░` to do) and the %; % of spec is the ticket's size over the total size. The last row, **Spec**, is the sum of size × progress over the total size, as a 20-block bar and the %:
-
-     | Ticket | Status | Progress | % of spec |
-     |---|---|---|---|
-     | #12 auth middleware | in progress | `████░░` 60% (3/5) | 21% |
-     | #16 SSO | in progress | `████░░░░░░` 40% (2/5) | 36% |
-     | **Spec** | | `██████████░░░░░░░░░░` **43%** | |
+  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. Whenever a ticket changes status (starts, is blocked or unblocked, goes to review, closes), and only then, show a table with one row per ticket: Ticket, Status, Progress, % of spec. Progress is acceptance criteria met over the total, as a bar of 2 blocks per size point (`█` done, `░` to do) and the %; % of spec is the ticket's size over the total size. The last row, **Spec**, is the sum of size × progress over the total size, as a 20-block bar and the %.
 
   If `docs/agents/` is missing, the issue tracker is not configured yet: suggest `setup-matt-pocock-skills` first.
   ```
