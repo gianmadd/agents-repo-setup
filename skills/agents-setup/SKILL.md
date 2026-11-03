@@ -172,9 +172,9 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   2. `to-spec`: writes the spec on the issue tracker
   3. `product-review`: an HTML mockup of the UI (only with the web UI check)
   4. `system-architecture`: diagrams, contracts and domain invariants (skipped for small changes)
-  5. `to-tickets`: splits the spec into tickets
+  5. `to-tickets`: splits the spec into tickets, each with a size (S, M, L, XL)
   6. `program-design`: the signatures and files each ticket will touch
-  7. `implement-spec`: builds the tickets in parallel with subagents and TDD, then a final code review; with each update, the spec's progress and each ticket's in progress; asks before push and PR as your git rules say
+  7. `implement-spec`: builds the tickets in parallel with subagents and TDD, then a final code review; at each ticket status change, a table of every ticket's progress and the spec's, weighted by size; asks before push and PR as your git rules say
   The skills install in this repo, not globally.
   ```
 - **Prerequisites**: from mattpocock/skills, `setup-matt-pocock-skills`, `grill-with-docs`, `grilling`, `domain-modeling`, `to-spec`, `to-tickets`, `implement-spec`, `tdd`, `code-review`; from gianmadd/agents-flow, `system-architecture`, `program-design`, and `product-review` with the web UI check.
@@ -193,9 +193,15 @@ The `AGENTS.local.md` lines of every entry, as a bullet list. When the rules sha
   2. `to-spec`: turn the settled design into a spec on the issue tracker.
   3. `product-review`, when the feature touches UI: an HTML mockup with success criteria per persona and edge case.
   4. `system-architecture`, unless it is a bug fix or a trivial feature: diagrams, contracts and domain invariants, appended to the spec.
-  5. `to-tickets`: split the spec into tickets with blocking relations.
+  5. `to-tickets`: split the spec into tickets with blocking relations. Give each ticket a size by eye, from the files it touches and its acceptance criteria: S=1, M=2, L=3, XL=5; write it in the ticket (`Size: M (2)`).
   6. `program-design`, unless no signature changes (config, data, mechanical rename): call tree, file changes and signatures, appended to each ticket.
-  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. With every progress update, give the spec's progress as closed tickets over the total (e.g. `Spec: 40% (2/5 tickets)`) and, for each ticket in progress, its acceptance criteria met over the total (e.g. `#12: 60% (3/5 criteria)`).
+  7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. Whenever a ticket changes status (starts, is blocked or unblocked, goes to review, closes), and only then, show a table with one row per ticket: Ticket, Status, Progress, % of spec. Progress is acceptance criteria met over the total, as a bar of 2 blocks per size point (`█` done, `░` to do) and the %; % of spec is the ticket's size over the total size. The last row, **Spec**, is the sum of size × progress over the total size, as a 20-block bar and the %:
+
+     | Ticket | Status | Progress | % of spec |
+     |---|---|---|---|
+     | #12 auth middleware | in progress | `████░░` 60% (3/5) | 21% |
+     | #16 SSO | in progress | `████░░░░░░` 40% (2/5) | 36% |
+     | **Spec** | | `██████████░░░░░░░░░░` **43%** | |
 
   If `docs/agents/` is missing, the issue tracker is not configured yet: suggest `setup-matt-pocock-skills` first.
   ```

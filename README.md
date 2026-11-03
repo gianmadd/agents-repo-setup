@@ -34,9 +34,9 @@ A Workflow for new features, built on [mattpocock/skills](https://github.com/mat
 | | `/to-spec` | the design becomes a spec on the issue tracker |
 | | `/product-review` | an HTML mockup of the UI, per persona and edge case (only with the web UI check) |
 | | `/system-architecture` | diagrams, contracts and domain invariants on the spec; skipped for small changes |
-| | `/to-tickets` | the spec becomes tickets, with what blocks what |
+| | `/to-tickets` | the spec becomes tickets, with what blocks what and a size (S, M, L, XL) |
 | | `/program-design` | the signatures and files each ticket will touch |
-| | `/implement-spec` | subagents build the tickets in parallel with TDD, each in its own worktree, with the spec's and each ticket's progress in % at each update; then a final review on two axes (`code-review`, `ponytail-review`); push and PR as your git rules say |
+| | `/implement-spec` | subagents build the tickets in parallel with TDD, each in its own worktree, with a progress table, weighted by size, at each ticket status change; then a final review on two axes (`code-review`, `ponytail-review`); push and PR as your git rules say |
 | fix something small, ask a question | just ask | for a larger task the agent asks once whether to use the Workflow |
 | keep the code lean | nothing | ponytail is always on: the least code that fully solves the task |
 | check a UI change | nothing | before saying it's done, the agent runs the app, in the browser with [playwright-cli](https://github.com/microsoft/playwright-cli) on the Android emulator or iOS simulator with [Maestro](https://maestro.dev), or on the Mac with [Peekaboo](https://github.com/openclaw/Peekaboo), tries the flow and reads the errors |
@@ -103,9 +103,15 @@ New features go through the Workflow, one step at a time. The user starts each s
 2. `to-spec`: turn the settled design into a spec on the issue tracker.
 3. `product-review`, when the feature touches UI: …
 4. `system-architecture`, unless it is a bug fix or a trivial feature: …
-5. `to-tickets`: split the spec into tickets with blocking relations.
+5. `to-tickets`: split the spec into tickets with blocking relations. Give each ticket a size by eye, from the files it touches and its acceptance criteria: S=1, M=2, L=3, XL=5; write it in the ticket (`Size: M (2)`).
 6. `program-design`, unless no signature changes: …
-7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. With every progress update, give the spec's progress as closed tickets over the total and, for each ticket in progress, its acceptance criteria met over the total.
+7. `implement-spec`: implement the tickets with subagents and TDD, then a final code review. Whenever a ticket changes status (starts, is blocked or unblocked, goes to review, closes), and only then, show a table with one row per ticket: Ticket, Status, Progress, % of spec. Progress is acceptance criteria met over the total, as a bar of 2 blocks per size point (`█` done, `░` to do) and the %; % of spec is the ticket's size over the total size. The last row, **Spec**, is the sum of size × progress over the total size, as a 20-block bar and the %:
+
+   | Ticket | Status | Progress | % of spec |
+   |---|---|---|---|
+   | #12 auth middleware | in progress | `████░░` 60% (3/5) | 21% |
+   | #16 SSO | in progress | `████░░░░░░` 40% (2/5) | 36% |
+   | **Spec** | | `██████████░░░░░░░░░░` **43%** | |
 
 ## Code
 
